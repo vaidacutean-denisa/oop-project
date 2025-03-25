@@ -124,7 +124,7 @@ Player::Player(int health_, float speed_, float x_, float y_, const std::vector<
     : health(health_), speed(speed_), x(x_), y(y_), weapons(weapons_), currentWeaponIndex(0) {}
 
 void Player::selectWeapon(int index) {
-    if (!weapons.empty() && index >= 0 && index < weapons.size()) {
+    if (!weapons.empty() && index >= 0 && index < static_cast<int>(weapons.size())) {
         currentWeaponIndex = index;
         std::cout << "Selected weapon: " << weapons[currentWeaponIndex].getWeaponName() << '\n';
         std::cout << "Your weapon has a damage of: " << weapons[currentWeaponIndex].getDamage() <<". Great choice!\n";
@@ -263,7 +263,7 @@ int main() {
         Perks(-5, 9, 10, "damage"),                        // de rezolvat cu durata bonusurilor; cel de health nu va avea durata
     };
 
-    int weaponIndex;
+    int weaponIndex = 0;
     bool validInput = false;
 
     while (!validInput) {
