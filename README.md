@@ -1,5 +1,9 @@
 # The Last Stand: Undead Uprising
 
+## Descriere 
+Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-un timp limitat. Incepi cu o arma de baza si trebuie sa elimini inamicii care devin tot mai puternici pe masura ce avansezi. Pe parcurs, poti obtine noi arme, munitie si bonusuri care iti imbunatatesc abilitatile (sanatate, viteza, putere de atac). Fiecare nivel ofera o provocare tot mai mare, iar succesul depinde de gestionarea atenta a resurselor si a timpului.
+
+(in lucru..)
 
 
 ### Tema 0
