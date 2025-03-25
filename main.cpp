@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <SFML/Graphics.hpp>
@@ -10,7 +11,7 @@ class Ammunition {
 
 public:
     // constructors
-    Ammunition(const std::string& type_, int quantity_);
+    explicit Ammunition(std::string  type_, int quantity_);
 
     // op <<
     friend std::ostream& operator<<(std::ostream& os, const Ammunition& ammo) {
@@ -20,8 +21,8 @@ public:
     }
 };
 
-Ammunition::Ammunition(const std::string& type_, int quantity_)
-    : type(type_), quantity(quantity_) { }
+Ammunition::Ammunition(std::string  type_, int quantity_)
+    : type(std::move(type_)), quantity(quantity_) { }
 
 class Weapon {
     std::string name;
@@ -33,7 +34,7 @@ class Weapon {
 
 public:
     // constructors (initialization & cc)
-    Weapon(const std::string& name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition ammo_);
+    explicit Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_);
     Weapon(const Weapon& other);
 
     // destructor
@@ -57,12 +58,12 @@ public:
     }
 
     // getters & setters
-    float getDamage() const { return damage; }
-    std::string getWeaponName() const { return name; }
+    [[nodiscard]] float getDamage() const { return damage; }
+    [[nodiscard]] std::string getWeaponName() const { return name; }
 };
 
-Weapon::Weapon(const std::string& name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition ammo_)
-    : name(name_), damage(dmg_), reloadTime(rTime_), ammoCapacity(capacity_), currentAmmo(currentAmmo_), ammo(ammo_) {}
+Weapon::Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_)
+    : name(std::move(name_)), damage(dmg_), reloadTime(rTime_), ammoCapacity(capacity_), currentAmmo(currentAmmo_), ammo(std::move(ammo_)) {}
 
 Weapon::Weapon(const Weapon& other) : name(other.name), damage(other.damage), reloadTime(other.reloadTime),
                                         ammoCapacity(other.ammoCapacity), currentAmmo(other.currentAmmo), ammo(other.ammo)
@@ -99,7 +100,7 @@ class Player {
 
 public:
     // constructors
-    Player(int health_, float speed_, float x_, float y_, const std::vector<Weapon>& weapons_);
+    explicit Player(int health_, float speed_, float x_, float y_, const std::vector<Weapon>& weapons_);
 
     // methods
     void selectWeapon(int index);
@@ -108,8 +109,8 @@ public:
     void applyHealthBoost(int boostAmount);
     void applySpeedBoost(float boostAmount);
 
-    int getHealth() const { return health; }
-    float getSpeed() const { return speed; }
+    [[nodiscard]] int getHealth() const { return health; }
+    [[nodiscard]] float getSpeed() const { return speed; }
 
     // op <<
     friend std::ostream& operator<<(std::ostream& os, const Player& player) {
@@ -157,7 +158,7 @@ class Enemy {
 
 public:
     // constructors (initialization & cc)
-    Enemy(int health_, float speed_, float x_, float y_);
+    explicit Enemy(int health_, float speed_, float x_, float y_);
     Enemy(const Enemy& other);
 
     // op=
@@ -202,7 +203,7 @@ class Perks {
 
 public:
     // constructors
-    Perks(float x_, float y_, float duration_, std::string type_) : x(x_), y(y_), duration(duration_), type(type_) {}
+    explicit Perks(float x_, float y_, float duration_, std::string  type_) : x(x_), y(y_), duration(duration_), type(std::move(type_)) {}
 
     // methods
     void applyPerk(Player& player) const;
@@ -254,9 +255,10 @@ int main() {
     // pentru a verifica op=, cc
     Enemy antonia(100, 17.5f, -2, -6);
     Enemy zombie1 = Enemy(100, 17.5f, 8, 10);
-    Enemy zombie2 = antonia;                  // cc   (creeaza un nou obiect (zombie1) facand o copie a unui obiect deja existent (antonia))
-    zombie1 = zombie2;                        // op=  (atribuie valoarea unui obiect (zombie2) altui obiect deja existent (zombie1))
+    const Enemy& zombie2 = antonia;                  // cc   (creeaza un nou obiect (zombie1) facand o copie a unui obiect deja existent (antonia))
+    zombie1 = zombie2;                               // op=  (atribuie valoarea unui obiect (zombie2) altui obiect deja existent (zombie1))
 
+    std::cout << zombie1 << " " << antonia << " " << zombie2 << '\n';
     std::vector<Perks> listOfPerks = {                                          // ar putea fi clase derivate? (de revazut) + bonus de ammo crate (idee)
         Perks(6, 14, 0, "health"),
         Perks(4, 3, 10,"speed"),
@@ -284,7 +286,7 @@ int main() {
     std::cout << "Player stats before applying perks: \n" << denisa;
 
     std::cout << "Applying perks..\n";
-    for (Perks& type : listOfPerks) {                                           // parcurge lista de perks si le aplica asupra player-ului
+    for (const Perks& type : listOfPerks) {                                           // parcurge lista de perks si le aplica asupra player-ului
         std::cout << type << '\n';          // pentru op<<
         type.applyPerk(denisa);
     }
