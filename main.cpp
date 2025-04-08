@@ -265,19 +265,19 @@ class EnemyManager {
     std::vector<Enemy> enemies;
     const sf::Texture& enemyTexture;
     sf::Clock enemySpawnClock;
-    float spawnInterval;
+    // float spawnInterval;
 
 public:
     // constructor
-    EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_, float spawnInterval_);
+    EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_); // float spawnInterval_);
 
     // methods
     [[maybe_unused]] void spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax);
     // void enemyMovement();  momentan nu este implementata
 };
 
-EnemyManager::EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_, float spawnInterval_)
-    : enemies(std::move(enemies_)), enemyTexture(enemyTexture_), spawnInterval(spawnInterval_) {}
+EnemyManager::EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_) //, float spawnInterval_)
+    : enemies(std::move(enemies_)), enemyTexture(enemyTexture_){} //spawnInterval(spawnInterval_) {}
 
 void EnemyManager::spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax) {             // generarea random a inamicilor
     static std::random_device randomSeed;
@@ -348,7 +348,7 @@ class Buttons {
     sf::Color hoveredColor;
     sf::Color clickedColor;
     sf::Color outlineColor;
-    float outlineThickness;
+    // float outlineThickness;
 
 public:
     // constructor
@@ -369,7 +369,7 @@ public:
 Buttons::Buttons(const sf::Vector2f size, const sf::Vector2f position, const std::string& label, const sf::Font& font,
                 const sf::Color& idleColor_, const sf::Color& hoveredColor_, const sf::Color& clickedColor_,
                 const sf::Color& outlineColor_, float outlineThickness_)
-        : idleColor(idleColor_), hoveredColor(hoveredColor_), clickedColor(clickedColor_), outlineColor(outlineColor_), outlineThickness(outlineThickness_)
+        : idleColor(idleColor_), hoveredColor(hoveredColor_), clickedColor(clickedColor_), outlineColor(outlineColor_)
 {
     button.setSize(size);
     button.setPosition(position);

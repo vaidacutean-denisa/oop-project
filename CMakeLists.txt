@@ -61,6 +61,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     generated/src/Helper.cpp
 )
 
+
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
 # NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
 set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
