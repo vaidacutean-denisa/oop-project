@@ -9,7 +9,9 @@ Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-u
 * Dialogul de la inceputul "jocului" (din terminal) a fost conceput initial ca un test pentru metodele implementate; iau in considerare posibilitatea de a integra o fereastra de dialog in joc (cu acelasi "storyline")
 * Am definit cateva concepte pe care nu le-am implementat/finalizat inca (de exemplu clasa EnemyManager); multe idei sunt in lucru :)
 * Referitor la boost-urile definite in cod - mesajele din terminal sunt doar pentru testare
-
+## Probleme
+* caracterul nu se roteste corespunzator (movement-ul este in lucru)
+* click-ul pe butonul de exit nu este detectat corespunzator (nu stiu de ce - incerc sa rezolv)
 ## (posibile) viitoare features
 - Integrarea unui sistem de spawn dinamic al inamicilor
 - Interactiunea jucatorului cu inamicii
