@@ -5,6 +5,30 @@ Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-u
 
 (in lucru..)
 
+## Comentarii 
+* Dialogul de la inceputul "jocului" (din terminal) a fost conceput initial ca un test pentru metodele implementate; iau in considerare posibilitatea de a integra o fereastra de dialog in joc (cu acelasi "storyline")
+* Am definit cateva concepte pe care nu le-am implementat/finalizat inca (de exemplu clasa EnemyManager); multe idei sunt in lucru :)
+* Referitor la boost-urile definite in cod - mesajele din terminal sunt doar pentru testare
+
+## (posibile) viitoare features
+- Integrarea unui sistem de spawn dinamic al inamicilor
+- Interactiunea jucatorului cu inamicii
+- Sistem de colectare si activare a perk-urilor
+- Sistem de tip inventar (?) (butonul "Inventory" din Main Menu ar putea sa ofere o imagine de ansamblu asupra armelor, iar jucatorul sa aiba un inventar in timpul luptei; inca nu am decis cum sau daca sa fac asta)
+- Posibilitatea de a opri melodia din background
+- Efecte audio
+- Efecte vizuale (?)
+
+## Gameplay
+### Movement 
+Jucătorul se poate deplasa folosind tastele W, A, S, D sau săgețile direcționale astfel:
+- W / Săgeata sus: mișcare înainte
+- A / Săgeata stângă: mișcare la stănga
+- S / Săgeata jos: mișcare înapoi
+- D / Săgeata dreaptă: mișcare la dreapta
+
+
+
 
 ### Tema 0
 
