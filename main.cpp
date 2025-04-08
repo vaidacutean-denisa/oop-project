@@ -4,7 +4,7 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
-#include "SFML/Audio/Music.hpp"
+#include <SFML/Audio/Music.hpp>
 
 #include <random>
 
