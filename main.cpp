@@ -134,9 +134,9 @@ public:
     // getters & setters
     [[nodiscard]] int getHealth() const { return health; }
 
-    [[nodiscard]] const Weapon& getWeapon() const {
-        return weapons[currentWeaponIndex];
-    }
+    // [[nodiscard]] const Weapon& getWeapon() const {
+    //     return weapons[currentWeaponIndex];
+    // }
 
     // op <<
     friend std::ostream& operator<<(std::ostream& os, const Player& player) {
@@ -202,11 +202,11 @@ class Enemy {
     float speed;
     sf::Vector2f position;
     sf::Sprite enemySprite;
-    const sf::Texture& enemyTexture;
+    // const sf::Texture& enemyTexture;
 
 public:
     // constructors (initialization & cc)
-    Enemy(float health_, float speed_, const sf::Vector2f& position_, const sf::Texture& texture_);
+    Enemy(float health_, float speed_, const sf::Vector2f& position_); // const sf::Texture& texture_);
     Enemy(const Enemy& other);
 
     // op=
@@ -227,17 +227,17 @@ public:
 
 };
 
-Enemy::Enemy(float health_, float speed_, const sf::Vector2f& position_, const sf::Texture& texture_)
-    : health(health_), speed(speed_), position(position_), enemyTexture(texture_)
+Enemy::Enemy(float health_, float speed_, const sf::Vector2f& position_) //, const sf::Texture& texture_)
+    : health(health_), speed(speed_), position(position_) // enemyTexture(texture_)
 {
-    enemySprite.setTexture(texture_);
-    enemySprite.setPosition(position_);
+    // enemySprite.setTexture(texture_);
+    // enemySprite.setPosition(position_);
 }
 
-Enemy::Enemy(const Enemy& other) : health(other.health), speed(other.speed), position(other.position), enemyTexture(other.enemyTexture) {
+Enemy::Enemy(const Enemy& other) : health(other.health), speed(other.speed), position(other.position){ // enemyTexture(other.enemyTexture) {
     std::cout << "cc Enemy\n";
-    enemySprite.setPosition(position);
-    enemySprite.setTexture(enemyTexture);
+    // enemySprite.setPosition(position);
+    // enemySprite.setTexture(enemyTexture);
 }
 
 Enemy& Enemy::operator=(const Enemy& other) {
@@ -246,9 +246,9 @@ Enemy& Enemy::operator=(const Enemy& other) {
         health = other.health;
         speed = other.speed;
         position = other.position;
-
-        enemySprite.setPosition(position);
-        enemySprite.setTexture(enemyTexture);
+        //
+        // enemySprite.setPosition(position);
+        // enemySprite.setTexture(enemyTexture);
     }
     return *this;
 }
@@ -487,7 +487,7 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1080}), "The Last Stan
                             menu(window), player(player_) {
     window.setVerticalSyncEnabled(true);
 
-    if (!backgroundMusic.openFromFile("Higher Octane - Vans in Japan.ogg")) {
+    if (!backgroundMusic.openFromFile("assets/music/music.mp3")) {
         std::cout << "Error loading background music.\n";
     }
     else {
