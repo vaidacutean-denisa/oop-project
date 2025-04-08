@@ -47,8 +47,8 @@ public:
     Weapon& operator=(const Weapon& other);
 
     // methods
-    void applyDamageBoost(float boostMultiplier);
-    bool shoot();
+    [[maybe_unused]] void applyDamageBoost(float boostMultiplier);
+    [[maybe_unused]] bool shoot();
 
     // op <<
     friend std::ostream& operator<<(std::ostream& os, const Weapon& weapon) {
@@ -63,7 +63,7 @@ public:
 
     // getters & setters
     [[nodiscard]] float getDamage() const { return damage; }
-    [[nodiscard]] std::string getWeaponName() const { return name; }
+    [[nodiscard]] const std::string& getWeaponName() const { return name; }
 };
 
 Weapon::Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_)
@@ -223,7 +223,7 @@ public:
     }
 
     // methods
-    void drawEnemies(sf::RenderWindow& window) const;
+    [[maybe_unused]] void drawEnemies(sf::RenderWindow& window) const;
 
 };
 
@@ -272,7 +272,7 @@ public:
     EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_, float spawnInterval_);
 
     // methods
-    void spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax);
+    [[maybe_unused]] void spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax);
     // void enemyMovement();  momentan nu este implementata
 };
 
@@ -457,12 +457,12 @@ void Menu::drawMenuButtons(sf::RenderWindow& window) {
     for (auto& button : buttons)
         button.updateButtonColor(window);
 
-    for (auto& button : buttons)
+    for (const auto& button : buttons)
         button.drawButton(window);
 }
 
 std::string Menu::handleClick(sf::Vector2i mousePosition) const {
-    for (auto& button : buttons) {
+    for (const auto& button : buttons) {
         if (button.isClicked(sf::Vector2f(mousePosition))) {
             return button.getLabel();
         }
