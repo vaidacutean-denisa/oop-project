@@ -48,7 +48,7 @@ public:
 
     // methods
     [[maybe_unused]] void applyDamageBoost(float boostMultiplier);
-    [[maybe_unused]] bool shoot();
+    // [[maybe_unused]] bool shoot();
 
     // op <<
     friend std::ostream& operator<<(std::ostream& os, const Weapon& weapon) {
@@ -97,15 +97,15 @@ void Weapon::applyDamageBoost(float boostMultiplier) {
     std::cout << "The updated damage is: " << damage << '\n';
 }
 
-bool Weapon::shoot() {
-    if (currentAmmo > 0) {
-        currentAmmo--;
-        return true;
-    }                                                                           // de implementat si mecanismul de reload
-
-    std::cout << "Empty magazine. You're on your own now.";
-    return false;
-}
+// bool Weapon::shoot() {
+//     if (currentAmmo > 0) {
+//         currentAmmo--;
+//         return true;
+//     }                                                                           // de implementat si mecanismul de reload
+//
+//     std::cout << "Empty magazine. You're on your own now.";
+//     return false;
+// }
 
 class Player {
     int health;
@@ -223,7 +223,7 @@ public:
     }
 
     // methods
-    [[maybe_unused]] void drawEnemies(sf::RenderWindow& window) const;
+    // [[maybe_unused]] void drawEnemies(sf::RenderWindow& window) const;
 
 };
 
@@ -257,9 +257,9 @@ Enemy::~Enemy() {
     std::cout << "One step closer to survival.. (destructor enemy)\n";
 }
 
-void Enemy::drawEnemies(sf::RenderWindow& window) const {
-    window.draw(enemySprite);
-}
+// void Enemy::drawEnemies(sf::RenderWindow& window) const {
+//     window.draw(enemySprite);
+// }
 
 class EnemyManager {
     std::vector<Enemy> enemies;
@@ -271,25 +271,25 @@ public:
     // constructor
     EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_); // float spawnInterval_);
 
-    // methods
-    [[maybe_unused]] void spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax);
-    // void enemyMovement();  momentan nu este implementata
+//     // methods
+//     [[maybe_unused]] void spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax);
+//     // void enemyMovement();  momentan nu este implementata
 };
 
 EnemyManager::EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_) //, float spawnInterval_)
     : enemies(std::move(enemies_)), enemyTexture(enemyTexture_){} //spawnInterval(spawnInterval_) {}
 
-void EnemyManager::spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax) {             // generarea random a inamicilor
-    static std::random_device randomSeed;
-    static std::mt19937 generator(randomSeed());                                                             // foloseste alg. Mersenne-Twister
-    std::uniform_real_distribution<float> disX(spawnAreaMin.x, spawnAreaMax.x);
-    std::uniform_real_distribution<float> disY(spawnAreaMin.y, spawnAreaMax.y);
-
-    float x = disX(generator);
-    float y = disY(generator);
-
-    enemies.emplace_back(100.0f, 1.5f, sf::Vector2f(x, y), enemyTexture);
-}
+// void EnemyManager::spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax) {             // generarea random a inamicilor
+//     static std::random_device randomSeed;
+//     static std::mt19937 generator(randomSeed());                                                             // foloseste alg. Mersenne-Twister
+//     std::uniform_real_distribution<float> disX(spawnAreaMin.x, spawnAreaMax.x);
+//     std::uniform_real_distribution<float> disY(spawnAreaMin.y, spawnAreaMax.y);
+//
+//     float x = disX(generator);
+//     float y = disY(generator);
+//
+//     enemies.emplace_back(100.0f, 1.5f, sf::Vector2f(x, y), enemyTexture);
+// }
 
 // void EnemyManager::enemyMovement() {
 //
