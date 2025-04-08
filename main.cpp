@@ -260,24 +260,24 @@ Enemy::~Enemy() {
 // void Enemy::drawEnemies(sf::RenderWindow& window) const {
 //     window.draw(enemySprite);
 // }
-
-class EnemyManager {
-    std::vector<Enemy> enemies;
-    const sf::Texture& enemyTexture;
-    sf::Clock enemySpawnClock;
-    // float spawnInterval;
-
-public:
-    // constructor
-    EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_); // float spawnInterval_);
-
-//     // methods
-//     [[maybe_unused]] void spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax);
-//     // void enemyMovement();  momentan nu este implementata
-};
-
-EnemyManager::EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_) //, float spawnInterval_)
-    : enemies(std::move(enemies_)), enemyTexture(enemyTexture_){} //spawnInterval(spawnInterval_) {}
+//
+// class EnemyManager {
+//     std::vector<Enemy> enemies;
+//     // const sf::Texture& enemyTexture;
+//     sf::Clock enemySpawnClock;
+//     // float spawnInterval;
+//
+// public:
+//     // constructor
+//     EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_); // float spawnInterval_);
+//
+// //     // methods
+// //     [[maybe_unused]] void spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax);
+// //     // void enemyMovement();  momentan nu este implementata
+// };
+//
+// EnemyManager::EnemyManager(std::vector<Enemy> enemies_, const sf::Texture& enemyTexture_) //, float spawnInterval_)
+//     : enemies(std::move(enemies_)), enemyTexture(enemyTexture_){} //spawnInterval(spawnInterval_) {}
 
 // void EnemyManager::spawnEnemy(const sf::Vector2f& spawnAreaMin, const sf::Vector2f& spawnAreaMax) {             // generarea random a inamicilor
 //     static std::random_device randomSeed;
