@@ -89,6 +89,7 @@ Weapon& Weapon::operator=(const Weapon& other) {
         ammoCapacity = other.ammoCapacity;
         currentAmmo = other.currentAmmo;
         ammo = other.ammo;
+        bulletSpeed = other.bulletSpeed;
     }
     return *this;
 }
