@@ -8,6 +8,8 @@
 
 #include <random>
 
+constexpr float pi = 3.1415f;
+
 class Ammunition {
     std::string type;           // tipul munitiei
     int quantity;               // ar trebui sa fie cantitatea pe care o are player-ul in inventar (inexistent din pacate)
@@ -34,10 +36,11 @@ class Weapon {
     float ammoCapacity;             // capacitatea incarcatorului
     float currentAmmo;              // cate gloante are pe incarcator
     Ammunition ammo;                // tipul de gloante folosite
+    float bulletSpeed;
 
 public:
     // constructors (initialization & cc)
-    Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_);
+    Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_, float bulletSpeed_);
     Weapon(const Weapon& other) = default;
 
     // destructor
@@ -48,7 +51,8 @@ public:
 
     // methods
     [[maybe_unused]] void applyDamageBoost(float boostMultiplier);
-    // [[maybe_unused]] bool shoot();
+    bool shoot();
+    void reload();
 
     // op <<
     friend std::ostream& operator<<(std::ostream& os, const Weapon& weapon) {
@@ -64,10 +68,12 @@ public:
     // getters & setters
     [[nodiscard]] float getDamage() const { return damage; }
     [[nodiscard]] const std::string& getWeaponName() const { return name; }
+    [[nodiscard]] float getBulletSpeed() const { return bulletSpeed; }
 };
 
-Weapon::Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_)
-    : name(std::move(name_)), damage(dmg_), reloadTime(rTime_), ammoCapacity(capacity_), currentAmmo(currentAmmo_), ammo(std::move(ammo_)) {}
+Weapon::Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_, float bulletSpeed_)
+    : name(std::move(name_)), damage(dmg_), reloadTime(rTime_), ammoCapacity(capacity_),
+      currentAmmo(currentAmmo_), ammo(std::move(ammo_)), bulletSpeed(bulletSpeed_) { }
 
 // Weapon::Weapon(const Weapon& other) : name(other.name), damage(other.damage), reloadTime(other.reloadTime),
 //                                         ammoCapacity(other.ammoCapacity), currentAmmo(other.currentAmmo), ammo(other.ammo)
@@ -97,23 +103,84 @@ void Weapon::applyDamageBoost(float boostMultiplier) {
     std::cout << "The updated damage is: " << damage << '\n';
 }
 
-// bool Weapon::shoot() {
-//     if (currentAmmo > 0) {
-//         currentAmmo--;
-//         return true;
-//     }                                                                           // de implementat si mecanismul de reload
-//
-//     std::cout << "Empty magazine. You're on your own now.";
-//     return false;
-// }
+bool Weapon::shoot() {
+    if (currentAmmo > 0) {
+        currentAmmo--;
+        return true;
+    }
+
+    std::cout << "Empty magazine. You're on your own now.";
+    return false;
+}
+
+void Weapon::reload() {                                                                 // trebuie modificat (e incomplet)
+    currentAmmo += ammoCapacity - currentAmmo;
+    std::cout << "Weapon reloaded. Full magazine: " << ammoCapacity << '\n';
+}
+
+class Bullet {
+    float speed;
+    sf::Vector2f direction;
+    sf::Vector2f position;
+    sf::Sprite bulletSprite;
+
+public:
+    // constructor
+    Bullet(const sf::Texture& bulletTexture, float speed_, const sf::Vector2f& direction_, const sf::Vector2f& position_);
+
+    // methods
+    void drawBullet(sf::RenderWindow& window) const;
+    void updateBullet(float deltaTime);
+    bool isOutOfBounds(const sf::RenderWindow& window) const;
+};
+
+Bullet::Bullet(const sf::Texture& bulletTexture, float speed_, const sf::Vector2f& direction_, const sf::Vector2f& position_)
+        : speed(speed_), direction(direction_), position(position_)  {
+    bulletSprite.setTexture(bulletTexture);
+    bulletSprite.setPosition(position.x, position.y);
+
+    constexpr float scaleX = 0.1f;
+    constexpr float scaleY = 0.1f;
+    bulletSprite.setScale(scaleX, scaleY);
+
+    const float angle = std::atan2(direction.y, direction.x) * 180.f / pi;
+    bulletSprite.setRotation(angle);
+}
+
+void Bullet::drawBullet(sf::RenderWindow& window) const {
+    window.draw(bulletSprite);
+}
+
+void Bullet::updateBullet(float deltaTime) {
+    position += direction * speed * deltaTime;                                  // deplasarea glontului de la un frame la altul
+    bulletSprite.setPosition(position.x, position.y);
+}
+
+bool Bullet::isOutOfBounds(const sf::RenderWindow& window) const {
+    float windowHeight = static_cast<float>(window.getSize().y);
+    float windowWidth = static_cast<float>(window.getSize().x);
+
+    return position.x < 0 || position.x > windowWidth||
+           position.y < 0 || position.y > windowHeight;
+}
 
 class Player {
     int health;
     float speed;
+    float normalSpeed;                                                          // pentru a reveni la viteza normala dupa ce trage
     sf::Vector2f position;
-    std::vector<Weapon> weapons;
+
     int currentWeaponIndex;
+    std::vector<Weapon> weapons;
+    std::vector<Bullet> bullets;
+    sf::Texture bulletTexture;
+
     sf::Sprite playerSprite;
+
+    sf::Clock shootingClock;
+    float shootCooldown;
+    sf::Clock slowTimer;                                                        // viteza jucatorului scade atunci cand trage cu arma
+    float slowFactor;
 
 public:
     // constructors
@@ -128,15 +195,15 @@ public:
 
     void drawPlayer(sf::RenderWindow& window) const;
     void updateSpritePosition();
-    void movePlayer(float dx, float dy);
+    void movePlayer(float dx, float dy, const sf::RenderWindow& window);
     void rotatePlayer(float angle);
+
+    void shoot();
+    void drawShooting(sf::RenderWindow& window) const;
+    void processBullets(float deltaTime, const sf::RenderWindow& window);
 
     // getters & setters
     [[nodiscard]] int getHealth() const { return health; }
-
-    // [[nodiscard]] const Weapon& getWeapon() const {
-    //     return weapons[currentWeaponIndex];
-    // }
 
     // op <<
     friend std::ostream& operator<<(std::ostream& os, const Player& player) {
@@ -148,10 +215,18 @@ public:
 };
 
 Player::Player(int health_, float speed_, sf::Vector2f position_, const std::vector<Weapon>& weapons_, const sf::Texture& playerTexture_)
-    : health(health_), speed(speed_), position(position_), weapons(weapons_), currentWeaponIndex(0) {
+    : health(health_), speed(speed_), normalSpeed(speed_), position(position_), currentWeaponIndex(0), weapons(weapons_), shootCooldown(0.3f), slowFactor(0.5f) {
     playerSprite.setTexture(playerTexture_);
-    playerSprite.setScale(0.7f, 0.7f);
+    playerSprite.setScale(0.6f, 0.6f);
+
+    sf::FloatRect bounds = playerSprite.getLocalBounds();                                   // (floatRect -> abstractizarea unui dreptunghi; sf::RectangleShape este un obiect desenabil)
+    playerSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);                    // calculeaza originea sprite-ului astfel incat punctul de referinta al acestuia sa fie in centru
+                                                                                            // punctul de referinta este implicit in coltul stanga sus -> comportament neasteptat la rotire
     updateSpritePosition();
+
+    if (!bulletTexture.loadFromFile("assets/images/bullet.png")) {
+        std::cerr << "Failed to load bullet texture!" << std::endl;
+    }
 }
 
 void Player::selectWeapon(int index) {
@@ -172,7 +247,7 @@ void Player::applyDamageBoost(const float boostMultiplier) {
 }
 
 void Player::applyHealthBoost(int boostAmount) {
-    const int maxHealth = 150;
+    constexpr int maxHealth = 150;
     if (health < maxHealth)                                                     // suppose maxhealth = 150 (to be reviewed)
         health += boostAmount;
 }
@@ -189,14 +264,86 @@ void Player::updateSpritePosition() {
     playerSprite.setPosition(position.x, position.y);
 }
 
-void Player::movePlayer(float dx, float dy) {
-    position.x += dx * speed;
-    position.y += dy * speed;
+void Player::movePlayer(float dx, float dy, const sf::RenderWindow& window) {
+    if (slowTimer.getElapsedTime().asSeconds() > shootCooldown) {
+        speed = normalSpeed;
+    }
+    float length = std::sqrt(dx * dx + dy * dy);                              // |v| = sqrt(dx^2 + dy^2), lungimea unui vector
+    if (length != 0) {
+        dx /= length;                                                           // normalizare; impart coordonatele vectorului la lungimea lui astfel incat |v_normalizat| = 1
+        dy /= length;                                                           // fara normalizare, s-ar fi deplasat mai repede pe diagonala decat in alte directii
+    }
+
+    float tempX = position.x + dx * speed;
+    float tempY = position.y + dy * speed;
+
+    const sf::Vector2u windowSize = window.getSize();
+    const auto windowWidth = static_cast<float>(windowSize.x);
+    const auto windowHeight = static_cast<float>(windowSize.y);
+
+    tempX = std::clamp(tempX, 0.f, windowWidth);                       // verifica si previne iesirea caracterului din limitele ferestrei
+    tempY = std::clamp(tempY, 0.f, windowHeight);                      // de ex. daca pozitia player-ului depaseste windowHeight, tempY va lua valoarea lui windowHeight
+                                                                                // analog pentru cazul in care pozitia scade sub 0 (marginea stanga / sus)
+    position.x = tempX;
+    position.y = tempY;
+
+    playerSprite.setPosition(position.x, position.y);
 }
 
 void Player::rotatePlayer(float angle) {
     playerSprite.setRotation(angle);
 }
+
+void Player::shoot() {
+    if (shootingClock.getElapsedTime().asSeconds() >= shootCooldown) {                      // jucatorul are un shooting cooldown pentru a preveni spam-ul
+        if (!weapons.empty()) {
+            Weapon& currentWeapon = weapons[currentWeaponIndex];
+
+            if (!currentWeapon.shoot()) {
+                currentWeapon.reload();
+                std::cout << "Reloading..\n";
+            }
+
+            float angle = playerSprite.getRotation();                                       // calculeaza directia glontului in functie de directia in care se uita jucatorul
+            float radians = angle * (pi / 180.f);
+            sf::Vector2f direction(std::cos(radians), std::sin(radians));               // transforma unghiul de rotatie al jucatorului intr-un vector de directie pentru glont (vector unitate)
+
+            float bulletSpeed = currentWeapon.getBulletSpeed();
+
+            sf::Vector2f visualOffset(50.f, 21.f);                                                                   // un offset vizual ca sa para ca glontul iese din arma
+            sf::Vector2f rotatedOffset;                                                                                  // ! de revizuit totusi pentru ca implementarea nu ar trebui sa depinda de valori fixe
+            rotatedOffset.x = visualOffset.x * std::cos(radians) - visualOffset.y * std::sin(radians);
+            rotatedOffset.y = visualOffset.x * std::sin(radians) + visualOffset.y * std::cos(radians);
+
+            sf::Vector2f bulletPosition = position + rotatedOffset;
+            bullets.emplace_back(bulletTexture, bulletSpeed, direction, bulletPosition);
+
+            speed *= slowFactor;
+            slowTimer.restart();
+        }
+        shootingClock.restart();
+    }
+}
+
+void Player::drawShooting(sf::RenderWindow &window) const {
+    for (const Bullet& bullet : bullets) {
+        bullet.drawBullet(window);
+    }
+}
+
+void Player::processBullets(float deltaTime, const sf::RenderWindow& window) {
+    for (Bullet& bullet : bullets)
+        bullet.updateBullet(deltaTime);
+
+    std::vector<Bullet> activeBullets;                                          // vector care contine doar gloantele vizibile pe ecran
+
+    for (const Bullet& bullet : bullets) {
+        if (!bullet.isOutOfBounds(window))
+            activeBullets.push_back(bullet);
+    }
+    bullets = std::move(activeBullets);
+}
+
 class Enemy {
     float health;
     float speed;
@@ -416,7 +563,7 @@ void Buttons::drawButton(sf::RenderWindow& window) const {
 }
 
 class Menu {
-    std::vector<Buttons> buttons;
+    std::vector<Buttons> menuButtons;
     sf::Font font;
 
 public:
@@ -426,7 +573,7 @@ public:
 };
 
 Menu::Menu(const sf::RenderWindow& window) {
-    if (!font.loadFromFile("SedanSC-Regular.ttf")) {
+    if (!font.loadFromFile("assets/fonts/SedanSC-Regular.ttf")) {
         std::cerr << "Error loading font.\n";
     }
 
@@ -446,23 +593,24 @@ Menu::Menu(const sf::RenderWindow& window) {
     float startY = (static_cast<float>(window.getSize().y) - totalHeight) /2.f;
 
     for (size_t i = 0; i < labels.size(); ++i) {
-        sf::Vector2f position((static_cast<float>(window.getSize().x )- buttonSize.x) / 2.f,
-            startY + static_cast<float>(i)*(buttonSize.y + padding));
-        buttons.emplace_back(buttonSize, position, labels[i], font, idleColor, hoveredColor, clickedColor, outlineColor, outlineThickness);
-    }
+        float windowWidth = static_cast<float>(window.getSize().x);
 
+        sf::Vector2f position((windowWidth- buttonSize.x) / 2.f, startY + static_cast<float>(i)*(buttonSize.y + padding));
+        menuButtons.emplace_back(buttonSize, position, labels[i], font, idleColor, hoveredColor, clickedColor,
+                                 outlineColor, outlineThickness);
+    }
 }
 
 void Menu::drawMenuButtons(sf::RenderWindow& window) {
-    for (auto& button : buttons)
+    for (auto& button : menuButtons)
         button.updateButtonColor(window);
 
-    for (const auto& button : buttons)
+    for (const auto& button : menuButtons)
         button.drawButton(window);
 }
 
 std::string Menu::handleClick(sf::Vector2i mousePosition) const {
-    for (const auto& button : buttons) {
+    for (const auto& button : menuButtons) {
         if (button.isClicked(sf::Vector2f(mousePosition))) {
             return button.getLabel();
         }
@@ -474,17 +622,25 @@ class Game {
     sf::RenderWindow window;
     Menu menu;
     Player& player;
+    sf::Clock clock;
     sf::Music backgroundMusic;
     sf::Text exitMessage;
     sf::Font font;
+    bool gameStarted;
+
+    void handleMusic();
+    void handleInput();
+    void updateGame(float deltaTime) const;
+    void drawGame();
+    void drawMenu();
 
 public:
     explicit Game(Player& player_);
     void runGame();
 };
 
-Game::Game(Player& player_) : window(sf::VideoMode({1920, 1080}), "The Last Stand: Undead Uprising", sf::Style::Default),
-                            menu(window), player(player_) {
+Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stand: Undead Uprising", sf::Style::Default),
+                            menu(window), player(player_), gameStarted(false) {
     window.setVerticalSyncEnabled(true);
 
     if (!backgroundMusic.openFromFile("assets/music/music.mp3")) {
@@ -495,82 +651,125 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1080}), "The Last Stan
         backgroundMusic.setVolume(20);
     }
 
-    if (!font.loadFromFile("SedanSC-Regular.ttf"))
+    if (!font.loadFromFile("assets/fonts/SedanSC-Regular.ttf"))
         std::cerr << "Error loading font.\n";
 
     exitMessage.setFont(font);
     exitMessage.setCharacterSize(18);
     exitMessage.setString("Press ESC to exit game.");
     exitMessage.setFillColor(sf::Color(140, 132, 112));
-    exitMessage.setPosition(845.f, 1020.f);
+
+    const sf::FloatRect textBounds = exitMessage.getLocalBounds();
+    exitMessage.setOrigin(textBounds.left + textBounds.width / 2.f, 0);
+    exitMessage.setPosition(static_cast<float>(window.getSize().x) / 2.f, 1080);
+}
+
+void Game::handleMusic() {
+    const float currentVolume = backgroundMusic.getVolume();
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal) && currentVolume < 100) {
+        backgroundMusic.setVolume(std::min(currentVolume + 2.f, 100.f));
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Dash) && currentVolume > 0) {
+        backgroundMusic.setVolume(std::max(currentVolume - 2.f, 0.f));
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
+        if (backgroundMusic.getStatus() == sf::Music::Playing)
+            backgroundMusic.pause();
+        else
+            backgroundMusic.play();
+    }
+}
+
+void Game::handleInput() {
+    sf::Event event{};
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
+            window.close();
+
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            std::string clickedButton = menu.handleClick(sf::Mouse::getPosition(window));
+
+            if (clickedButton == "Play") {
+                std::cout << "Play button clicked.\n";
+                gameStarted = true;
+            }
+            if (clickedButton == "Inventory") {
+                std::cout << "Inventory button clicked.\n";
+            }
+            if (clickedButton == "Exit") {
+                std::cout << "Exit button clicked.\n";
+                window.close();
+            }
+        }
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        window.close();
+}
+
+void Game::updateGame(const float deltaTime) const {
+    if (gameStarted) {
+        float dx = 0.f, dy = 0.f;
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+            player.rotatePlayer(270.f);
+            dy = -0.5f;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+            player.rotatePlayer(180.f);
+            dx = -0.5f;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+            player.rotatePlayer(90.f);
+            dy = 0.5f;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+            player.rotatePlayer(0.f);
+            dx = 0.5f;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            player.shoot();
+
+
+        player.movePlayer(dx, dy, window);
+        player.updateSpritePosition();
+        player.processBullets(deltaTime, window);
+    }
+}
+
+void Game::drawGame() {
+    player.drawShooting(window);
+}
+
+void Game::drawMenu() {
+    window.draw(exitMessage);
+    menu.drawMenuButtons(window);
 }
 
 void Game::runGame() {
-    sf::Event event{};
-    bool gameStarted = false;
-
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
-
     backgroundMusic.play();
 
     while (window.isOpen()) {
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                std::string clickedButton = menu.handleClick(sf::Mouse::getPosition(window));
-
-                if (clickedButton == "Play") {
-                    std::cout << "Play button clicked.\n";
-                    gameStarted = true;
-                }
-                if (clickedButton == "Inventory") {
-                    std::cout << "Inventory button clicked.\n";
-                }
-                if (clickedButton == "Exit") {
-                    std::cout << "Exit button clicked.\n";
-                    window.close();
-                }
-            }
-        }
+        handleInput();
         window.clear(sf::Color(47, 59, 39));
 
+        float deltaTime = clock.restart().asSeconds();
+
+        updateGame(deltaTime);
+
         if (gameStarted) {
+            drawGame();
             player.drawPlayer(window);
-
-            float dx = 0.0f, dy = 0.0f;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-                dy = -0.6f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-                dx = -0.6f;
-                player.rotatePlayer(150.f);
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-                dy = 0.6f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-                dx = 0.6f;
-                player.rotatePlayer(0.f);
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                window.close();
-            }
-
-            player.movePlayer(dx, dy);
-            player.updateSpritePosition();
-
         }
-        else {
-            window.draw(exitMessage);
-            menu.drawMenuButtons(window);
-        }
+        else
+            drawMenu();
+
+        handleMusic();
 
         window.display();
     }
+
     backgroundMusic.stop();
 }
 
@@ -580,17 +779,17 @@ int main() {
     Ammunition m4_Ammo = Ammunition("9mm", 60);
     Ammunition shotgun_Ammo = Ammunition("12 Gauge", 20);
 
-    Weapon ak("AK-47", 17, 2.5f, 30, 30, ak_Ammo);
-    Weapon pistol("Pistol", 7.0f, 1.3f, 15, 15, pistol_Ammo);
-    Weapon m4("M416", 14.5f, 1.8f, 30, 30, m4_Ammo);
-    Weapon shotgun("Shotgun", 40, 5.5f, 5, 5, shotgun_Ammo);
+    Weapon ak("AK-47", 17, 2.5f, 30, 30, ak_Ammo, 1100.f);
+    Weapon pistol("Pistol", 7.0f, 1.3f, 15, 15, pistol_Ammo, 800.f);
+    Weapon m4("M416", 14.5f, 1.8f, 30, 30, m4_Ammo, 1050.f);
+    Weapon shotgun("Shotgun", 40, 5.5f, 5, 5, shotgun_Ammo, 750.f);
 
     sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile("survivor-idle_rifle_0.png")) {
+    if (!playerTexture.loadFromFile("assets/images/survivor-idle_rifle_0.png")) {
         std::cout << "Error loading player texture.";
     }
 
-    Player player(100, 15.5f, sf::Vector2f(100, 100), {ak, pistol, m4, shotgun}, playerTexture);
+    Player player(100, 14.f, sf::Vector2f(350, 450), {ak, pistol, m4, shotgun}, playerTexture);
 
     std::vector<Perks> listOfPerks = {                                          // ar putea fi clase derivate? (de revazut) + bonus de ammo crate (idee)
         Perks(6, 14, 0, "health"),
