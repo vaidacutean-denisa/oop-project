@@ -319,7 +319,7 @@ void Player::shoot() {
             sf::Vector2f bulletPosition = position + rotatedOffset;
             bullets.emplace_back(bulletTexture, bulletSpeed, direction, bulletPosition);
 
-            speed *= slowFactor;
+            speed = normalSpeed * slowFactor;
             slowTimer.restart();
         }
         shootingClock.restart();
