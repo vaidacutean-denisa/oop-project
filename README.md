@@ -31,15 +31,15 @@ Jucătorul se poate deplasa folosind tastele W, A, S, D sau săgețile direcțio
 - D / Săgeata dreaptă: mișcare la dreapta.
 
 ### Combat
-Tasta Space trage cu arma selectată.
+- Space: trage cu arma selectată.
 
 ### Audio Manager
-Tasta M comută între redare și pauză pentru muzica de fundal;
-Tasta = crește volumul melodiei cu două unități;
-Tasta - scade volumul melodiei cu două unități.
+- Tasta M comută între redare și pauză pentru muzica de fundal;
+- Tasta = crește volumul melodiei cu două unități;
+- Tasta - scade volumul melodiei cu două unități.
 
 ### General
-Tasta Esc închide fereastra de joc.
+- Esc: închide fereastra de joc.
 
 
 ### Tema 0
