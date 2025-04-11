@@ -667,19 +667,33 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stan
 
 void Game::handleMusic() {
     const float currentVolume = backgroundMusic.getVolume();
+    static bool isMuted = false;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal) && currentVolume < 100) {
-        backgroundMusic.setVolume(std::min(currentVolume + 2.f, 100.f));
+    if (!isMuted) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal) && currentVolume < 100) {
+            backgroundMusic.setVolume(std::min(currentVolume + 2.f, 100.f));
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Dash) && currentVolume > 0) {
+            backgroundMusic.setVolume(std::max(currentVolume - 2.f, 0.f));
+        }
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Dash) && currentVolume > 0) {
-        backgroundMusic.setVolume(std::max(currentVolume - 2.f, 0.f));
-    }
+
+    static bool pressed = false;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
-        if (backgroundMusic.getStatus() == sf::Music::Playing)
-            backgroundMusic.pause();
-        else
-            backgroundMusic.play();
+        if (!pressed) {
+            if (backgroundMusic.getStatus() == sf::Music::Playing) {
+                backgroundMusic.pause();
+                isMuted = true;
+            }
+            else {
+                backgroundMusic.play();
+                isMuted = false;
+            }
+            pressed = true;
+        }
     }
+    else
+        pressed = false;
 }
 
 void Game::handleInput() {
