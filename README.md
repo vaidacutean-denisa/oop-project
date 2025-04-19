@@ -40,7 +40,7 @@ Jucătorul se poate deplasa folosind tastele W, A, S, D sau săgețile direcțio
 ## Resurse 
 Am folosit următoarele resurse:
 - pentru textura jucătorului: https://opengameart.org/content/animated-top-down-survivor-player
-- pentru textura gloanțelor: https://dinopixel.com/user/pandalover2012/2
+- pentru textura gloanțelor: https://dinopixel.com/bullet-pixel-art-42595
 - pentru muzica de fundal: Higher Octane – Vans in Japan (din YouTube Audio Library, fără drepturi de autor)
 - pentru font: Google Fonts - SedanSC-Regular
   
