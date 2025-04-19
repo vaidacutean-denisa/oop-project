@@ -10,15 +10,11 @@ Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-u
 * Am definit cateva concepte pe care nu le-am implementat/finalizat inca (de exemplu clasa EnemyManager); multe idei sunt in lucru :)
 * Referitor la boost-urile definite in cod - mesajele din terminal sunt doar pentru testare
   
-## Probleme
-* caracterul nu se roteste corespunzator (movement-ul este in lucru) - ✅ rezolvat
-* click-ul pe butonul de exit nu este detectat corespunzator (nu stiu de ce - incerc sa rezolv) - ✅ rezolvat (problema era banala!)
 ## (posibile) viitoare features
 - Integrarea unui sistem de spawn dinamic al inamicilor
 - Interactiunea jucatorului cu inamicii
 - Sistem de colectare si activare a perk-urilor
 - Sistem de tip inventar (?) (butonul "Inventory" din Main Menu ar putea sa ofere o imagine de ansamblu asupra armelor, iar jucatorul sa aiba un inventar in timpul luptei; inca nu am decis cum sau daca sa fac asta)
-- Posibilitatea de a opri melodia din background - ✅ rezolvat
 - Efecte audio
 - Efecte vizuale (?)
 
@@ -41,7 +37,13 @@ Jucătorul se poate deplasa folosind tastele W, A, S, D sau săgețile direcțio
 ### General
 - Esc: închide fereastra de joc.
 
-
+## Resurse 
+Am folosit următoarele resurse:
+- pentru textura jucătorului: https://opengameart.org/content/animated-top-down-survivor-player
+- pentru textura gloanțelor: https://dinopixel.com/user/pandalover2012/2
+- pentru muzica de fundal: Higher Octane – Vans in Japan (din YouTube Audio Library, fără drepturi de autor)
+- pentru font: Google Fonts - SedanSC-Regular
+  
 ### Tema 0
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
