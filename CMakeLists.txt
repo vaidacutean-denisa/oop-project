@@ -59,8 +59,16 @@ endif()
 add_executable(${MAIN_EXECUTABLE_NAME}
     main.cpp
     generated/src/Helper.cpp
+    src/Ammunition.cpp
+    src/Weapon.cpp
+    src/Bullet.cpp
+    src/Player.cpp
+    src/Enemy.cpp
+    src/Perks.cpp
+    src/Buttons.cpp
+    src/Menu.cpp
+    src/Game.cpp
 )
-
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
 # NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
@@ -75,8 +83,17 @@ set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
 target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE generated/include)
 # target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include)
+
+target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE headers)
+
 target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${SFML_BINARY_DIR}/lib)
-target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE sfml-graphics sfml-window sfml-system sfml-audio Threads::Threads)
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE
+        sfml-graphics
+        sfml-window
+        sfml-audio
+        sfml-system
+        Threads::Threads
+)
 
 if(APPLE)
 elseif(UNIX)
