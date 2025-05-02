@@ -3,7 +3,7 @@
 
 #include "Menu.h"
 #include "Player.h"
-#include "SFML/Audio/Music.hpp"
+#include <SFML/Audio/Music.hpp>
 
 class Game {
 	sf::RenderWindow window;
