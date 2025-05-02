@@ -1,7 +1,7 @@
-#include "Enemy.h"
-#include "Game.h"
-#include "Perks.h"
-#include "Player.h"
+#include "headers/Enemy.h"
+#include "headers/Game.h"
+#include "headers/Perks.h"
+#include "headers/Player.h"
 
 int main() {
     Ammunition ak_Ammo = Ammunition("7.62mm", 60);
