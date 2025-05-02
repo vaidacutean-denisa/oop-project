@@ -60,14 +60,23 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     main.cpp
     generated/src/Helper.cpp
     src/Ammunition.cpp
+    headers/Ammunition.h
     src/Weapon.cpp
+    headers/Weapon.h
     src/Bullet.cpp
+    headers/Bullet.h
     src/Player.cpp
+    headers/Player.h
     src/Enemy.cpp
+    headers/Enemy.h
     src/Perks.cpp
+    headers/Perks.h
     src/Buttons.cpp
+    headers/Buttons.h
     src/Menu.cpp
+    headers/Menu.h
     src/Game.cpp
+    headers/Game.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
