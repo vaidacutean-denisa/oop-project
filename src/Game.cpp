@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "../headers/Game.h"
 
 Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stand: Undead Uprising", sf::Style::Default),
                             menu(window), player(player_), gameStarted(false) {

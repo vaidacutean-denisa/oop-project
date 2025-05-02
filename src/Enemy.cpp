@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "../headers/Enemy.h"
 
 std::ostream& operator<<(std::ostream& os, const Enemy& enemy) {
     os << "Enemy - health = " << enemy.health << '\n'

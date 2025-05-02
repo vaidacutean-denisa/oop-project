@@ -1,4 +1,4 @@
-#include "Perks.h"
+#include "../headers/Perks.h"
 
 std::ostream& operator<<(std::ostream& os, const Perks& perk) {
     os << "Perks - Type: " << perk.type << '\n'

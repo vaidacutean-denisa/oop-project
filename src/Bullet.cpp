@@ -1,4 +1,4 @@
-#include "Bullet.h"
+#include "../headers/Bullet.h"
 #include <cmath>
 
 constexpr float pi = 3.1415f;

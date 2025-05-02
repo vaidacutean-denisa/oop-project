@@ -1,4 +1,4 @@
-#include "Ammunition.h"
+#include "../headers/Ammunition.h"
 
 std::ostream& operator<<(std::ostream& os, const Ammunition& ammo) {
     os << "Ammo type = " << ammo.type << '\n'

@@ -1,4 +1,4 @@
-#include "Buttons.h"
+#include "../headers/Buttons.h"
 
 
 std::string Buttons::getLabel() const { return text.getString(); }
