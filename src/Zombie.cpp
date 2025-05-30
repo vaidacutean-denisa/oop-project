@@ -1,7 +1,5 @@
 #include "../headers/Zombie.h"
 
-constexpr float pi = 3.1415f;
-
 Zombie::Zombie(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition, float attackCooldown_)
                 : Enemy(health_, enemySpeed_, enemyPosition, attackCooldown_), zombieDamage(0) {
 	scalingFactor = 5.5f;

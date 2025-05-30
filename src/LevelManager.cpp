@@ -3,7 +3,7 @@
 #include <iostream>
 
 LevelManager::LevelManager(MessageManager& messageManager_)
-    : currentLevel(1), levelTimer(0.f), levelDuration(10.f), messageManager(messageManager_) {}
+    : currentLevel(1), levelTimer(0.f), levelDuration(10.f) {}
 
 void LevelManager::updateLevel(const float deltaTime) {
 	if (currentLevel >= 4)

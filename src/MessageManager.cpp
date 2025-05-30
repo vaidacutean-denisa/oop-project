@@ -1,15 +1,15 @@
 #include "../headers/MessageManager.h"
 #include <iostream>
 
-MessageManager::MessageManager() {
-	levelMessages = {
+MessageManager::MessageManager() :
+	levelMessages {
 		{1, "Eyes open. First mistake's on you.\n"},
 		{2, "You've barely scratched the surface. There's no room for error now.\n"},
 		{3, "Every step forward is a mistake you're still alive to regret.\nNevertheless, you've lasted longer than most. That won't go unnoticed.\n"},
 		{4, "You've run out of predictable problems.\n Final contact expected. Interpretation is up to you.\n"},
-	};
+	},
 
-	eventMessages = {
+	eventMessages {
 		{"emptyMag", "Empty magazine. You're on your own now.\n"},
 		{"lowHealth", "Vitals unstable. You're one decision away from silence.\n"},
 		{"perk_lowHP", "Stabilization in progress. You're not dead yet, technically.\n"},
@@ -24,8 +24,8 @@ MessageManager::MessageManager() {
 						"The ground shifts, and only the adaptable survive.\n Until then, take this moment for yourself - the world can wait."},
 		{"restart", "Press ENTER to restart the game.\n"},
 		{"exit", "Press ESC to exit the game.\n"}
-	};
-}
+	} {}
+
 
 std::string MessageManager::getLevelMessage(const int level) const {
 	if (levelMessages.contains(level)) {

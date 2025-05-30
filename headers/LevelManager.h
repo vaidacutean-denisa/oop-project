@@ -8,8 +8,6 @@ class LevelManager {
     float levelTimer;
     float levelDuration;
 
-    MessageManager& messageManager;
-
 public:
     // constructor
     explicit LevelManager(MessageManager& messageManager_);

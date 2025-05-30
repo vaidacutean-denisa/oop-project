@@ -56,6 +56,6 @@ void MessageDisplay::drawMessage(sf::RenderWindow& window) const {
 	window.draw(message);
 }
 
-bool MessageDisplay::isActive() const {
-	return active;
-}
+// bool MessageDisplay::isActive() const {
+// 	return active;
+// }

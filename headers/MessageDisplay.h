@@ -19,7 +19,7 @@ public:
 	void updateMessage();
 
 	void drawMessage(sf::RenderWindow& window) const;
-	bool isActive() const;
+	// bool isActive() const;
 };
 
 #endif //MESSAGEDISPLAY_H
