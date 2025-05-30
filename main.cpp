@@ -2,6 +2,8 @@
 #include "headers/Game.h"
 #include "headers/Perks.h"
 #include "headers/Player.h"
+#include "headers/Ammunition.h"
+#include "headers/Weapon.h"
 
 int main() {
     Ammunition ak_Ammo = Ammunition("7.62mm", 60);
@@ -87,6 +89,12 @@ int main() {
     std::cout << "Player stats after applying perks: \n" << player;
 
     // in lucru...
-    Game game(player);
-    game.runGame();
+    try {
+        Game game(player);
+        game.runGame();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << '\n';
+        return EXIT_FAILURE;
+    }
 }

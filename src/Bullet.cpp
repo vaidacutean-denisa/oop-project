@@ -32,3 +32,7 @@ bool Bullet::isOutOfBounds(const sf::RenderWindow& window) const {
     return position.x < 0 || position.x > windowWidth||
            position.y < 0 || position.y > windowHeight;
 }
+
+sf::FloatRect Bullet::getBounds() const {
+    return bulletSprite.getGlobalBounds();
+}

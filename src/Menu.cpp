@@ -24,7 +24,11 @@ Menu::Menu(const sf::RenderWindow& window) {
 	for (size_t i = 0; i < labels.size(); ++i) {
 		float windowWidth = static_cast<float>(window.getSize().x);
 
-		sf::Vector2f position((windowWidth- buttonSize.x) / 2.f, startY + static_cast<float>(i)*(buttonSize.y + padding));
+	    const auto visualOffsetX = -280.f;
+	    const auto visualOffsetY = -30.f;
+		sf::Vector2f position((windowWidth- buttonSize.x) / 2.f + visualOffsetX,
+		                        startY + static_cast<float>(i)*(buttonSize.y + padding) + visualOffsetY);
+
 		menuButtons.emplace_back(buttonSize, position, labels[i], font, idleColor, hoveredColor, clickedColor,
 								 outlineColor, outlineThickness);
 	}

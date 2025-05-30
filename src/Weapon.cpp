@@ -57,6 +57,7 @@ void Weapon::reload() {                                                         
     currentAmmo += ammoCapacity - currentAmmo;
     std::cout << "Weapon reloaded. Full magazine: " << ammoCapacity << '\n';
 }
+
 float Weapon::getDamage() const { return damage; }
 const std::string& Weapon::getWeaponName() const { return name; }
 float Weapon::getBulletSpeed() const { return bulletSpeed; }

@@ -4,16 +4,7 @@
 
 constexpr float pi = 3.1415f;
 
-int Player::getHealth() const { return health; }
-
-std::ostream& operator<<(std::ostream& os, const Player& player) {
-    os << "Player - Health = " << player.health << '\n'
-       << "Speed = " << player.speed << '\n'
-       << player.weapons[player.currentWeaponIndex] << '\n';
-    return os;
-}
-
-Player::Player(int health_, float speed_, sf::Vector2f position_, const std::vector<Weapon>& weapons_, const sf::Texture& playerTexture_)
+Player::Player(float health_, float speed_, sf::Vector2f position_, const std::vector<Weapon>& weapons_, const sf::Texture& playerTexture_)
     : health(health_), speed(speed_), normalSpeed(speed_), position(position_), currentWeaponIndex(0), weapons(weapons_), shootCooldown(0.3f), slowFactor(0.5f) {
 
     playerSprite.setTexture(playerTexture_);
@@ -46,7 +37,7 @@ void Player::applyDamageBoost(const float boostMultiplier) {
     }
 }
 
-void Player::applyHealthBoost(int boostAmount) {
+void Player::applyHealthBoost(float boostAmount) {
     constexpr int maxHealth = 150;
     if (health < maxHealth)                                                     // suppose maxhealth = 150 (to be reviewed)
         health += boostAmount;
@@ -142,4 +133,71 @@ void Player::processBullets(float deltaTime, const sf::RenderWindow& window) {
             activeBullets.push_back(bullet);
     }
     bullets = std::move(activeBullets);
+}
+
+sf::Vector2f Player::getCenterPosition() const {
+	return {
+		playerSprite.getPosition().x + playerSprite.getGlobalBounds().width / 2.f,
+		playerSprite.getPosition().y + playerSprite.getGlobalBounds().height / 2.f
+	};
+}
+
+void Player::takeDamage(float amount) {
+	health -= amount;
+	if (health < 0.f) {
+		health = 0.f;
+	}
+}
+
+void Player::applySlowness(const float slowMultiplier, const float slowDuration) {
+	if (slowTimeLeft <= 0.f) {
+		speed *= slowMultiplier;
+		slowTimeLeft = slowDuration;
+	}
+}
+
+void Player::updateEffectStatus(float deltaTime) {
+	if (slowTimeLeft > 0.f) {
+		slowTimeLeft -= deltaTime;
+
+		if (slowTimeLeft <= 0.f) {
+			speed = normalSpeed;
+			slowTimeLeft = 0.f;
+		}
+	}
+}
+
+bool Player::isDead() const {
+	return health <= 0.f;
+}
+
+void Player::resetPlayerValues() {
+	health = 100;
+	position = {0.f, 0.f};
+	speed = normalSpeed;
+}
+
+float Player::getHealth() const { return health; }
+
+sf::Vector2f Player::getPosition() const {
+	return playerSprite.getPosition();
+}
+
+std::vector<Bullet>& Player::getBullets() { return bullets; }
+
+const Weapon& Player::getCurrentWeapon() const {
+	return weapons[currentWeaponIndex];
+}
+
+sf::Vector2f Player::getPlayerSize() const { return playerSprite.getGlobalBounds().getSize(); }
+
+sf::Sprite Player::getSprite() const {
+	return playerSprite;
+}
+
+std::ostream& operator<<(std::ostream& os, const Player& player) {
+	os << "Player - Health = " << player.health << '\n'
+	   << "Speed = " << player.speed << '\n'
+	   << player.weapons[player.currentWeaponIndex] << '\n';
+	return os;
 }

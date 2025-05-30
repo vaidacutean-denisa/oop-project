@@ -17,6 +17,9 @@ public:
     void drawBullet(sf::RenderWindow& window) const;
     void updateBullet(float deltaTime);
     bool isOutOfBounds(const sf::RenderWindow& window) const;
+
+    // getters & setters
+    sf::FloatRect getBounds() const;
 };
 
 #endif //BULLET_H

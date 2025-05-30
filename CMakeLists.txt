@@ -77,6 +77,26 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/Menu.h
     src/Game.cpp
     headers/Game.h
+    src/WeakZombie.cpp
+    headers/WeakZombie.h
+    src/StrongZombie.cpp
+    headers/StrongZombie.h
+    src/Zombie.cpp
+    headers/Zombie.h
+    src/EnemySpawner.cpp
+    headers/EnemySpawner.h
+    src/MessageManager.cpp
+    headers/MessageManager.h
+    src/LevelManager.cpp
+    headers/LevelManager.h
+    src/CombatSystem.cpp
+    headers/CombatSystem.h
+    src/AssetsManager.cpp
+    headers/AssetsManager.h
+    src/Skeleton.cpp
+    headers/Skeleton.h
+        src/MessageDisplay.cpp
+        src/MessageDisplay.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
