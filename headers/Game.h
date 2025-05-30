@@ -35,6 +35,7 @@ class Game {
 
 	std::unique_ptr<EnemySpawner> spawner;
 	std::vector<std::unique_ptr<Enemy>> enemies{};
+	bool enterPressed = false;
 
     MessageManager messageManager;
     LevelManager levelManager;

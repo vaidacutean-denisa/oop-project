@@ -10,7 +10,7 @@ class LevelManager {
 
 public:
     // constructor
-    explicit LevelManager(MessageManager& messageManager_);
+    explicit LevelManager();
 
     // methods
     void updateLevel(float deltaTime);

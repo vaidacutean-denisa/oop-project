@@ -1,7 +1,7 @@
 #ifndef ASSETSMANAGER_H
 #define ASSETSMANAGER_H
-#include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/Texture.hpp"
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics.hpp>
 
 #include <memory>
