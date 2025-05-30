@@ -1,4 +1,4 @@
-#include "Skeleton.h"
+#include "../headers/Skeleton.h"
 #include <cmath>
 
 Skeleton::Skeleton(const sf::Texture& skeletonTexture, const sf::Texture& projectileTexture_)

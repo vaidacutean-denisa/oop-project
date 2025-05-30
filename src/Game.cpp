@@ -105,14 +105,13 @@ void Game::handleInput() {
 }
 
 void Game::updateGame(const float deltaTime) {
-	static bool enterPressed = false;
-
 	switch (gameState) {
 		case GameState::GameRunning:
 			updateRunning(deltaTime);
 			break;
 		case GameState::GameOver:
-		case GameState::GameWin:
+		case GameState::GameWin: {
+			static bool enterPressed = false;
 			checkEndings();
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 				if (!enterPressed) {
@@ -120,6 +119,7 @@ void Game::updateGame(const float deltaTime) {
 					enterPressed = true;
 				}
 			break;
+		}
 		default:
 			break;
 	}

@@ -1,6 +1,5 @@
 #ifndef SKELETON_H
 #define SKELETON_H
-#include "SFML/System/Vector2.hpp"
 #include "../headers/AssetsManager.h"
 #include "../headers/Bullet.h"
 #include "../headers/Enemy.h"
