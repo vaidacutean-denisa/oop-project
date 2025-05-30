@@ -95,8 +95,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/AssetsManager.h
     src/Skeleton.cpp
     headers/Skeleton.h
-        src/MessageDisplay.cpp
-        src/MessageDisplay.h
+    src/MessageDisplay.cpp
+    headers/MessageDisplay.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
