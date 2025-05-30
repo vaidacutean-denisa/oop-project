@@ -156,16 +156,16 @@ void Player::applySlowness(const float slowMultiplier, const float slowDuration)
 	}
 }
 
-void Player::updateEffectStatus(float deltaTime) {
-	if (slowTimeLeft > 0.f) {
-		slowTimeLeft -= deltaTime;
-
-		if (slowTimeLeft <= 0.f) {
-			speed = normalSpeed;
-			slowTimeLeft = 0.f;
-		}
-	}
-}
+// void Player::updateEffectStatus(float deltaTime) {			incomplet mecanismul de slowness
+// 	if (slowTimeLeft > 0.f) {
+// 		slowTimeLeft -= deltaTime;
+//
+// 		if (slowTimeLeft <= 0.f) {
+// 			speed = normalSpeed;
+// 			slowTimeLeft = 0.f;
+// 		}
+// 	}
+// }
 
 bool Player::isDead() const {
 	return health <= 0.f;

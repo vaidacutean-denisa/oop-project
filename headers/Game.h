@@ -32,12 +32,9 @@ class Game {
     sf::Sprite battlefieldSprite;
 
 	sf::Text exitMessage;
-	bool gameStarted;
 
 	std::unique_ptr<EnemySpawner> spawner;
 	std::vector<std::unique_ptr<Enemy>> enemies{};
-	sf::Clock levelBreakClock;
-	bool levelBreak;
 
     MessageManager messageManager;
     LevelManager levelManager;

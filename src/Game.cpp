@@ -2,7 +2,7 @@
 #include "../headers/Skeleton.h"
 
 Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stand: Undead Uprising", sf::Style::Default),
-                            menu(window), player(player_), gameStarted(false), levelBreak(false), messageManager(), levelManager(messageManager),
+                            menu(window), player(player_), messageManager(), levelManager(messageManager),
 							previousLevel(0), messageDisplay(), gameState(GameState::Menu)
  {
     window.setVerticalSyncEnabled(true);
@@ -105,6 +105,8 @@ void Game::handleInput() {
 }
 
 void Game::updateGame(const float deltaTime) {
+	static bool enterPressed = false;
+
 	switch (gameState) {
 		case GameState::GameRunning:
 			updateRunning(deltaTime);
@@ -112,7 +114,6 @@ void Game::updateGame(const float deltaTime) {
 		case GameState::GameOver:
 		case GameState::GameWin:
 			checkEndings();
-			static bool enterPressed = false;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 				if (!enterPressed) {
 					resetGame();

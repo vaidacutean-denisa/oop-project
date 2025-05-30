@@ -3,8 +3,6 @@
 #include <cmath>
 #include <memory>
 
-constexpr float pi = 3.1415f;
-
 Enemy::Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition_, float attackCooldown_)
     : health(health_), enemySpeed(enemySpeed_), enemyPosition(enemyPosition_), attackCooldown(attackCooldown_), scalingFactor(0)
 {
@@ -25,6 +23,10 @@ Enemy& Enemy::operator=(const Enemy& other) {
         health = other.health;
         enemySpeed = other.enemySpeed;
         enemyPosition = other.enemyPosition;
+    	enemySprite = other.enemySprite;
+    	attackClock = other.attackClock;
+    	attackCooldown = other.attackCooldown;
+    	scalingFactor = other.scalingFactor;
     }
     return *this;
 }

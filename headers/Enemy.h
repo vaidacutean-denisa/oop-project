@@ -28,7 +28,7 @@ protected:
 
 public:
     // constructors (initialization & cc)
-    Enemy() = default;
+	Enemy() : health(100), enemySpeed(1.f), enemyPosition(0.f,0.f), attackCooldown(0.f), scalingFactor(1.f) {}
     Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition_, float attackCooldown_);
     Enemy(const Enemy& other);
 
