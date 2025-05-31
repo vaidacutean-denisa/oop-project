@@ -19,12 +19,12 @@ int main() {
 
 		Player player(100, 16.f, sf::Vector2f(350, 450),
 					 weaponManager.createPlayerWeapons(), playerTexture);
-
-		std::vector<Perks> listOfPerks = {                                          // ar putea fi clase derivate? (de revazut) + bonus de ammo crate (idee)
-			Perks(6, 14, 0, "health"),
-			Perks(4, 3, 10,"speed"),
-			Perks(-5, 9, 10, "damage"),                        // de rezolvat cu durata bonusurilor; cel de health nu va avea durata
-		};
+		
+		// std::vector<Perks> listOfPerks = {                                          // ar putea fi clase derivate? (de revazut) + bonus de ammo crate (idee)
+		// 	Perks(6, 14, 0, "health"),
+		// 	Perks(4, 3, 10,"speed"),
+		// 	Perks(-5, 9, 10, "damage"),                        // de rezolvat cu durata bonusurilor; cel de health nu va avea durata
+		// };
 
 		// testarea functionalitatii de aplicare a bonusurilor (momentan nu e practica) + voi renunta la ea cand implementez sistemul de aplicare a perk-urilor
 		std::cout << "The groundwork is laid. Time to start building something legendary.\n";
