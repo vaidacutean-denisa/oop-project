@@ -39,21 +39,21 @@ void Player::selectWeapon(int index) {
 	currentWeaponIndex = index;
 }
 
-void Player::applyDamageBoost(const float boostMultiplier) {
-    if (!weapons.empty()) {
-        weapons[currentWeaponIndex].applyDamageBoost(boostMultiplier);
-    }
-}
-
-void Player::applyHealthBoost(float boostAmount) {
-    constexpr int maxHealth = 150;
-    if (health < maxHealth)                                                     // suppose maxhealth = 150 (to be reviewed)
-        health += boostAmount;
-}
-
-void Player::applySpeedBoost(float boostAmount) {
-    speed += boostAmount;
-}
+// void Player::applyDamageBoost(const float boostMultiplier) {
+//     if (!weapons.empty()) {
+//         weapons[currentWeaponIndex].applyDamageBoost(boostMultiplier);
+//     }
+// }
+//
+// void Player::applyHealthBoost(float boostAmount) {
+//     constexpr int maxHealth = 150;
+//     if (health < maxHealth)                                                     // suppose maxhealth = 150 (to be reviewed)
+//         health += boostAmount;
+// }
+//
+// void Player::applySpeedBoost(float boostAmount) {
+//     speed += boostAmount;
+// }
 
 void Player::drawPlayer(sf::RenderWindow& window) const {
     window.draw(playerSprite);

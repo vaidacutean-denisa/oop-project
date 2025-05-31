@@ -29,7 +29,7 @@ int main() {
 		// testarea functionalitatii de aplicare a bonusurilor (momentan nu e practica) + voi renunta la ea cand implementez sistemul de aplicare a perk-urilor
 		std::cout << "The groundwork is laid. Time to start building something legendary.\n";
 		// std::cout << "Player stats before applying perks: \n" << player;
-
+		//
 		// std::cout << "Applying perks..\n";
 		// for (const Perks& type : listOfPerks) {                                           // parcurge lista de perks si le aplica asupra player-ului
 		// 	std::cout << type << '\n';
