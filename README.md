@@ -13,6 +13,7 @@ Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-u
   - Integrarea unui sistem de colectare si / sau activare directa a perk-urilor la intersectia cu acestea (vor aparea random pe harta).
     ^(cel mai probabil ramane activare directa din motive mai mult sau mai putin evidente :)
   - Dezvoltarea unui meniu care sa afiseze informatii referitoare la armele din joc (la apasarea butonului Inventory din meniul principal)
+
     ^^ implicit voi renunta la dialogul din terminal, intrucat ideea mea este sa pot alege arma din inventar; daca dau play fara sa aleg arma, ori primesc una default, ori nu continua jocul pana nu aleg eu - ✅ rezolvat (daca jucatorul nu alege, i se atribuie implicit arma de la indexul 0)
 
 ### Probleme
