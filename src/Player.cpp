@@ -1,11 +1,13 @@
 #include "../headers/Player.h"
 #include <cmath>
 #include <memory>
+#include "../headers/GameExceptions.h"
 
 constexpr float pi = 3.1415f;
 
 Player::Player(float health_, float speed_, sf::Vector2f position_, const std::vector<Weapon>& weapons_, const sf::Texture& playerTexture_)
-    : health(health_), speed(speed_), normalSpeed(speed_), position(position_), currentWeaponIndex(0), weapons(weapons_), shootCooldown(0.3f), slowFactor(0.5f) {
+    : health(health_), speed(speed_), normalSpeed(speed_), position(position_), currentWeaponIndex(0), weapons(weapons_),
+      shootCooldown(0.3f), slowFactor(0.5f), slowedByShooting(false) {
 
     playerSprite.setTexture(playerTexture_);
     playerSprite.setScale(0.6f, 0.6f);
@@ -21,14 +23,20 @@ Player::Player(float health_, float speed_, sf::Vector2f position_, const std::v
 }
 
 void Player::selectWeapon(int index) {
-    if (!weapons.empty() && index >= 0 && index < static_cast<int>(weapons.size())) {
-        currentWeaponIndex = index;
-        std::cout << "Selected weapon: " << weapons[currentWeaponIndex].getWeaponName() << '\n';
-        std::cout << "Your weapon has a damage of: " << weapons[currentWeaponIndex].getDamage() <<". Great choice!\n";
-    }
-    else {
-        std::cout << "Invalid weapon index!\n";
-    }
+	if (weapons.empty()) {
+		throw PlayerException("No weapons available in inventory");
+	}
+
+	if (index < 0) {
+		throw PlayerException("Invalid weapon index: negative value");
+	}
+
+	if (index >= static_cast<int>(weapons.size())) {
+		throw PlayerException("Weapon index out of range: " + std::to_string(index) +
+							" (max: " + std::to_string(weapons.size() - 1) + ")");
+	}
+
+	currentWeaponIndex = index;
 }
 
 void Player::applyDamageBoost(const float boostMultiplier) {
@@ -56,9 +64,7 @@ void Player::updateSpritePosition() {
 }
 
 void Player::movePlayer(float dx, float dy, const sf::RenderWindow& window) {
-    if (slowTimer.getElapsedTime().asSeconds() > shootCooldown) {
-        speed = normalSpeed;
-    }
+
     float length = std::sqrt(dx * dx + dy * dy);                              // |v| = sqrt(dx^2 + dy^2), lungimea unui vector
     if (length != 0) {
         dx /= length;                                                           // normalizare; impart coordonatele vectorului la lungimea lui astfel incat |v_normalizat| = 1
@@ -90,10 +96,8 @@ void Player::shoot() {
         if (!weapons.empty()) {
             Weapon& currentWeapon = weapons[currentWeaponIndex];
 
-            if (!currentWeapon.shoot()) {
+            if (!currentWeapon.shoot())
                 currentWeapon.reload();
-                std::cout << "Reloading..\n";
-            }
 
             float angle = playerSprite.getRotation();                                       // calculeaza directia glontului in functie de directia in care se uita jucatorul
             float radians = angle * (pi / 180.f);
@@ -109,8 +113,11 @@ void Player::shoot() {
             sf::Vector2f bulletPosition = position + rotatedOffset;
             bullets.emplace_back(bulletTexture, bulletSpeed, direction, bulletPosition);
 
-            speed = normalSpeed * slowFactor;
-            slowTimer.restart();
+        	if (slowTimeLeft <= 0.f && !slowedByShooting) {
+        		speed = normalSpeed * slowFactor;
+        		slowedByShooting = true;
+        		slowTimer.restart();
+        	}
         }
         shootingClock.restart();
     }
@@ -156,19 +163,28 @@ void Player::applySlowness(const float slowMultiplier, const float slowDuration)
 	}
 }
 
-// void Player::updateEffectStatus(float deltaTime) {			incomplet mecanismul de slowness
-// 	if (slowTimeLeft > 0.f) {
-// 		slowTimeLeft -= deltaTime;
-//
-// 		if (slowTimeLeft <= 0.f) {
-// 			speed = normalSpeed;
-// 			slowTimeLeft = 0.f;
-// 		}
-// 	}
-// }
+void Player::updateEffectStatus(float deltaTime) {
+	if (slowedByShooting && slowTimer.getElapsedTime().asSeconds() >= shootCooldown) {
+		slowedByShooting = false;
+		speed = normalSpeed;
+	}
+
+	if (slowTimeLeft > 0.f) {						// incetinirea cauzata de slow effect-ul de la strong zombie
+		slowTimeLeft -= deltaTime;
+		if (slowTimeLeft <= 0.f) {
+			slowTimeLeft = 0.f;
+			if (!slowedByShooting)
+				speed = normalSpeed;
+		}
+	}
+}
 
 bool Player::isDead() const {
 	return health <= 0.f;
+}
+
+void Player::clearBullets() {
+	bullets.clear();
 }
 
 void Player::resetPlayerValues() {
@@ -193,6 +209,15 @@ sf::Vector2f Player::getPlayerSize() const { return playerSprite.getGlobalBounds
 
 sf::Sprite Player::getSprite() const {
 	return playerSprite;
+}
+
+std::vector<Weapon *> Player::getWeapons() {
+	std::vector<Weapon*> weaponPtr;
+
+	for (auto& weapon : weapons)
+		weaponPtr.push_back(&weapon);
+
+	return weaponPtr;
 }
 
 std::ostream& operator<<(std::ostream& os, const Player& player) {

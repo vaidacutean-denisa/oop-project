@@ -1,5 +1,6 @@
 #include "../headers/Game.h"
 #include "../headers/Skeleton.h"
+#include "../headers/GameExceptions.h"
 
 Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stand: Undead Uprising", sf::Style::Default),
                             menu(window), player(player_), messageManager(), levelManager(),
@@ -7,24 +8,16 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stan
  {
     window.setVerticalSyncEnabled(true);
 
-    if (!assetsManager.loadTexture("background", "assets/images/background2.png")) {
-        std::cout << "Error loading background texture.\n";                     // throw aici
-    }
-
-    if (!assetsManager.loadTexture("battlefield", "assets/images/battlefield22.png")) {
-        std::cout << "Error loading battlefield texture.\n";
-    }
-
-    if (!assetsManager.loadFont("font", "assets/fonts/SedanSC-Regular.ttf")) {
-        std::cout << "Error loading font.\n";
-    }
+	assetsManager.loadTexture("background", "assets/images/background2.png");
+	assetsManager.loadTexture("battlefield", "assets/images/battlefield22.png");
+	assetsManager.loadFont("font", "assets/fonts/SedanSC-Regular.ttf");
 
     backgroundSprite = assetsManager.getScaledSprite("background", window.getSize());
     battlefieldSprite = assetsManager.getScaledSprite("battlefield", window.getSize());
 
-    if (!backgroundMusic.openFromFile("assets/music/music.mp3")) {
-        std::cout << "Error loading background music.\n";
-    }
+    if (!backgroundMusic.openFromFile("assets/music/music.mp3"))
+    	throw ResourceLoadException("music.mp3");
+
     else {
         backgroundMusic.setLoop(true);
         backgroundMusic.setVolume(20);
@@ -43,6 +36,9 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stan
 
     spawner = std::make_unique<EnemySpawner>(&enemies, 4.f, assetsManager);
 	finalMessageShown = false;
+
+	inventoryMenu = std::make_unique<InventoryMenu>(player.getWeapons());
+	inventoryMenu->centerInWindow(window);
 }
 
 void Game::handleMusic() {
@@ -77,31 +73,63 @@ void Game::handleMusic() {
 }
 
 void Game::handleInput() {
-    sf::Event event{};
+	sf::Event event{};
+	static bool mousePressed = false;
 
-    while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
-            window.close();
+	while (window.pollEvent(event)) {
+		if (event.type == sf::Event::Closed)
+			window.close();
 
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-            std::string clickedButton = menu.handleClick(sf::Mouse::getPosition(window));
+		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+			if (!mousePressed) {
+				mousePressed = true;
 
-            if (clickedButton == "Play") {
-                std::cout << "Play button clicked.\n";
-                gameState = GameState::GameRunning;
-            }
-            if (clickedButton == "Inventory") {
-                std::cout << "Inventory button clicked.\n";
-            }
-            if (clickedButton == "Exit") {
-                std::cout << "Exit button clicked.\n";
-                window.close();
-            }
-        }
-    }
+				if (gameState == GameState::Menu) {
+					std::string clickedButton = menu.handleClick(sf::Mouse::getPosition(window));
+					if (clickedButton == "Play") {
+						if (!weaponSelected)
+							messageDisplay.displayMessage("Select a weapon first!", 2.f, window, 80.f);
+						else
+							gameState = GameState::GameRunning;
+					}
+					if (clickedButton == "Inventory")
+						gameState = GameState::Inventory;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-        window.close();
+					if (clickedButton == "Exit")
+						window.close();
+
+				}
+				else if (gameState == GameState::Inventory) {
+					int selectedWeapon = inventoryMenu->handleClick(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+					if (selectedWeapon != -1) {
+						player.selectWeapon(selectedWeapon);
+						weaponSelected = true;
+						gameState = GameState::Menu;
+					}
+				}
+			}
+		}
+		else if (event.type == sf::Event::MouseButtonReleased) {
+			mousePressed = false;
+		}
+
+		if (event.type == sf::Event::KeyPressed) {
+			if (event.key.code == sf::Keyboard::Escape) {
+				if (gameState == GameState::Inventory)
+					gameState = GameState::Menu;
+				else
+					window.close();
+			}
+			else if (event.key.code == sf::Keyboard::Enter)
+				if ((gameState == GameState::GameOver || gameState == GameState::GameWin) && !enterPressed) {
+					resetGame();
+					enterPressed = true;
+				}
+		}
+		else if (event.type == sf::Event::KeyReleased)
+			if (event.key.code == sf::Keyboard::Enter)
+				enterPressed = false;
+	}
 }
 
 void Game::updateGame(const float deltaTime) {
@@ -112,15 +140,10 @@ void Game::updateGame(const float deltaTime) {
 		case GameState::GameOver:
 		case GameState::GameWin: {
 			checkEndings();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-				if (!enterPressed) {
-					resetGame();
-					enterPressed = true;
-				}
 			break;
 		}
 		default:
-			break;
+			throw GameStateException("Invalid game state in update");
 	}
 }
 
@@ -146,6 +169,7 @@ void Game::updateRunning(const float deltaTime) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		player.shoot();
 
+	player.updateEffectStatus(deltaTime);
 	player.movePlayer(dx, dy, window);
 	player.updateSpritePosition();
 	player.processBullets(deltaTime, window);
@@ -158,11 +182,11 @@ void Game::updateRunning(const float deltaTime) {
 		previousLevel = currentLevel;
 		std::string levelMessage = messageManager.getLevelMessage(currentLevel);
 
-		messageDisplay.displayMessage(levelMessage, 5.f, window);
+		messageDisplay.displayMessage(levelMessage, 5.f, window, 45.f);
 	}
 	messageDisplay.updateMessage();
 
-	if (levelManager.getCurrentLevel() == tempFinalLevel) {
+	if (levelManager.getCurrentLevel() >= tempFinalLevel) {
 		if (enemies.empty() && !player.isDead())
 			gameState = GameState::GameWin;
 	}
@@ -190,7 +214,7 @@ void Game::checkEndings() {
 	if (!finalMessageShown) {
 		if (player.isDead())
 			endGame(GameState::GameOver);
-		else if (levelManager.getCurrentLevel() == tempFinalLevel && enemies.empty())
+		else if (levelManager.getCurrentLevel() >= tempFinalLevel && enemies.empty())
 			endGame(GameState::GameWin);
 	}
 }
@@ -199,6 +223,7 @@ void Game::endGame(GameState endState) {
 	gameState = endState;
 
 	enemies.clear();
+	player.clearBullets();
 	player.getSprite().setPosition(-1000, -1000);
 
 	std::string endMessage;
@@ -207,14 +232,14 @@ void Game::endGame(GameState endState) {
 	else
 		endMessage = messageManager.getEventMessage("gameOver");
 
-	messageDisplay.displayMessage(endMessage, 7.f, window);
+	messageDisplay.displayMessage(endMessage, 7.f, window, 45.f);
 	if (endState == GameState::GameWin) {
 		std::string epilogue = messageManager.getEventMessage("epilogue");
-		messageDisplay.displayMessage(epilogue, 8.f, window);
+		messageDisplay.displayMessage(epilogue, 8.f, window, 45.f);
 	}
 
 	finalMessageShown = true;
-	//
+
 	// std::string restartMessage = messageManager.getEventMessage("restart");
 	// messageDisplay.displayMessage(restartMessage, 5.f, window);
 }
@@ -235,6 +260,7 @@ void Game::drawMenu() {
     window.draw(backgroundSprite);
     window.draw(exitMessage);
     menu.drawMenuButtons(window);
+	messageDisplay.drawMessage(window);
 }
 
 void Game::runGame() {
@@ -248,6 +274,10 @@ void Game::runGame() {
 
 		if (gameState == GameState::Menu)
 			drawMenu();
+		else if (gameState == GameState::Inventory) {
+			window.draw(backgroundSprite);
+			inventoryMenu->drawInventory(window);
+		}
 		else {
 			updateGame(deltaTime);
 			window.draw(battlefieldSprite);
@@ -259,6 +289,7 @@ void Game::runGame() {
 		}
 
         handleMusic();
+		messageDisplay.updateMessage();
 
         window.display();
     }
@@ -269,8 +300,10 @@ void Game::runGame() {
 void Game::resetGame() {
 	gameState = GameState::Menu;
 	finalMessageShown = false;
+	messageDisplay.clearMessage();
 
 	levelManager.resetLevel();
 	enemies.clear();
 	player.resetPlayerValues();
+	enterPressed = false;
 }

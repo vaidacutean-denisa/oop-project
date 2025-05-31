@@ -32,6 +32,8 @@ public:
     Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition_, float attackCooldown_);
     Enemy(const Enemy& other);
 
+	virtual Enemy* clone() const = 0;
+
     // op=
     Enemy& operator=(const Enemy& other);
 

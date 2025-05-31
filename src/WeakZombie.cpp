@@ -10,6 +10,12 @@ WeakZombie::WeakZombie(const sf::Texture& weakZombieTexture) : Zombie(100.f, 4.f
     // std::cout << "sprite size: " << getSprite().getGlobalBounds().width << "x" << getSprite().getGlobalBounds().height << std::endl;
 }
 
+WeakZombie::WeakZombie(const WeakZombie& other) : Zombie(other) {
+	enemySprite.setTexture(*other.enemySprite.getTexture());
+	enemySprite.setScale(other.enemySprite.getScale());
+}
+
+
 void WeakZombie::attackPlayer(Player& player) {
 	if (enemySprite.getGlobalBounds().intersects(player.getSprite().getGlobalBounds()))
 		if (attackClock.getElapsedTime().asSeconds() >= attackCooldown) {

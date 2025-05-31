@@ -4,17 +4,22 @@
 #include "../headers/Zombie.h"
 
 class StrongZombie : public Zombie {
-	float slowMultiplier = 0.5f;
-	float slowDuration = 5.f;
+	float slowMultiplier;
+	float slowDuration;
 
-	bool isEnraged = false;
+	bool isEnraged;
 
 	// methods
 	void enterEnragedState();
 
 public:
 	// constructor
-	explicit StrongZombie(const sf::Texture& strongZombieTexture);
+	explicit StrongZombie(const sf::Texture &strongZombieTexture);
+	StrongZombie(const StrongZombie &other);
+
+	Enemy * clone() const override {
+		return new StrongZombie(*this);
+	}
 
 	// methods
     void attackPlayer(Player& player) override;

@@ -1,11 +1,19 @@
 #include "../headers/StrongZombie.h"
 
-StrongZombie::StrongZombie(const sf::Texture& strongZombieTexture) : Zombie(180.f, 5.f, {0.f, 0.f}, 2.3f)
+StrongZombie::StrongZombie(const sf::Texture& strongZombieTexture) : Zombie(180.f, 5.f, {0.f, 0.f}, 2.3f),
+			slowMultiplier(0.15f), slowDuration(1.3f), isEnraged(false)
 {
 	enemySprite.setTexture(strongZombieTexture);
 	enemySprite.setScale(0.7f, 0.7f);
 	zombieDamage = 10.f;
 }
+
+StrongZombie::StrongZombie(const StrongZombie& other)
+	 : Zombie(other) , slowMultiplier(other.slowMultiplier) , slowDuration(other.slowDuration), isEnraged(other.isEnraged) {
+	enemySprite.setTexture(*other.enemySprite.getTexture());
+	enemySprite.setScale(other.enemySprite.getScale());
+}
+
 
 void StrongZombie::enterEnragedState() {
 	isEnraged = true;
@@ -22,7 +30,7 @@ void StrongZombie::attackPlayer(Player& player) {
 	if (enemySprite.getGlobalBounds().intersects(player.getSprite().getGlobalBounds()))
 		if (attackClock.getElapsedTime().asSeconds() >= attackCooldown) {
 			player.takeDamage(zombieDamage);
-			player.applySlowness(slowMultiplier, slowDuration);
+			player.applySlowness(slowMultiplier, slowDuration);				// de tinut cont ca zombie-ul are attack cooldown
 			attackClock.restart();
 		}
 }

@@ -15,6 +15,14 @@ Skeleton::Skeleton(const sf::Texture& skeletonTexture, const sf::Texture& projec
 	enemySprite.setScale(0.45f, 0.45f);
 }
 
+Skeleton::Skeleton(const Skeleton& other) : Enemy(other), collisionDamage(other.collisionDamage), projectiles(other.projectiles),
+	projectileTexture(other.projectileTexture), shootingCooldown(other.shootingCooldown), shootTimer(other.shootTimer),
+	projectileSpeed(other.projectileSpeed), projectileDamage(other.projectileDamage) {
+	enemySprite.setTexture(*other.enemySprite.getTexture());
+	enemySprite.setScale(other.enemySprite.getScale());
+}
+
+
 sf::Vector2f Skeleton::getSize() const {
 	return enemySprite.getGlobalBounds().getSize();
 }

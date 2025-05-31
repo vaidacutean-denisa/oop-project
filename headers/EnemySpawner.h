@@ -17,6 +17,10 @@ class EnemySpawner {
 	sf::Texture skeletonTexture;
 	sf::Texture skeletonProjectileTexture;
 
+	std::unique_ptr<Enemy> weakZombieTemplate;
+	std::unique_ptr<Enemy> strongZombieTemplate;
+	std::unique_ptr<Enemy> skeletonTemplate;
+
 	std::mt19937 generator;
 
 	AssetsManager& assetsManager;

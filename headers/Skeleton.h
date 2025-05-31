@@ -16,7 +16,12 @@ class Skeleton : public Enemy {
 
 public:
 	// constructors
-	Skeleton(const sf::Texture& skeletonTexture, const sf::Texture& projectileTexture_);
+	Skeleton(const sf::Texture &skeletonTexture, const sf::Texture &projectileTexture_);
+	Skeleton(const Skeleton &other);
+
+	Enemy * clone() const override {
+		return new Skeleton(*this);
+	}
 
 	float getMinDistanceToPlayer(const sf::Vector2f &playerSize) override;
 	void updateEnemies(const sf::Vector2f& playerCenter, const sf::Vector2u& windowSize, const sf::Vector2f& playerSize) override;

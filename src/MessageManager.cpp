@@ -6,7 +6,7 @@ MessageManager::MessageManager() :
 		{1, "Eyes open. First mistake's on you.\n"},
 		{2, "You've barely scratched the surface. There's no room for error now.\n"},
 		{3, "Every step forward is a mistake you're still alive to regret.\nNevertheless, you've lasted longer than most. That won't go unnoticed.\n"},
-		{4, "You've run out of predictable problems.\n Final contact expected. Interpretation is up to you.\n"},
+		{4, "You've run out of predictable problems.\nFinal contact expected. Interpretation is up to you.\n"},
 	},
 
 	eventMessages {
@@ -21,7 +21,7 @@ MessageManager::MessageManager() :
 		{"gameOver", "Mission terminated. File closed with questions pending.\n You've proved one thing: limits still exist.\n"},
 		{"gameWin", "Mission accomplished. You've succeeded where most would have failed. The victory's yours.\n"},
 		{"epilogue", "But now that the dust settles, the next mission is already on the horizon.\nA different journey, one that won't be defined by past victories."
-						"The ground shifts, and only the adaptable survive.\n Until then, take this moment for yourself - the world can wait."},
+						"The ground shifts, and only the adaptable survive.\nUntil then, take this moment for yourself - the world can wait."},
 		{"restart", "Press ENTER to restart the game.\n"},
 		{"exit", "Press ESC to exit the game.\n"}
 	} {}

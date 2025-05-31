@@ -15,7 +15,6 @@ Enemy::Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition
 
 Enemy::Enemy(const Enemy& other) : health(other.health), enemySpeed(other.enemySpeed), enemyPosition(other.enemyPosition),
 	  attackCooldown(other.attackCooldown), scalingFactor(other.scalingFactor) {
-    std::cout << "cc Enemy\n";
 }
 
 Enemy& Enemy::operator=(const Enemy& other) {

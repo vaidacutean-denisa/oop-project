@@ -9,12 +9,14 @@
 #include "../headers/Menu.h"
 #include "../headers/Player.h"
 #include "../headers/MessageDisplay.h"
+#include "../headers/InventoryMenu.h"
 
 enum class GameState {
 	Menu,
 	GameRunning,
 	GameOver,
-	GameWin
+	GameWin,
+	Inventory
 };
 
 class Game {
@@ -47,6 +49,8 @@ class Game {
 	bool finalMessageShown;
 
 	GameState gameState;
+	std::unique_ptr<InventoryMenu> inventoryMenu;
+	bool weaponSelected = false;
 
 	void handleMusic();
 	void handleInput();

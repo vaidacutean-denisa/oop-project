@@ -23,6 +23,7 @@ class Player {
     float shootCooldown;
     sf::Clock slowTimer;                                                        // viteza jucatorului scade atunci cand trage cu arma
     float slowFactor;
+	bool slowedByShooting;
 
 	float slowTimeLeft = 0.f;
 
@@ -54,6 +55,7 @@ public:
 
 	bool isDead() const;
 
+	void clearBullets();
 	void resetPlayerValues();
 
 	// getters & setters
@@ -63,8 +65,9 @@ public:
     const Weapon& getCurrentWeapon() const;
 	sf::Vector2f getPlayerSize() const;
 	sf::Sprite getSprite() const;
+	std::vector<Weapon *> getWeapons();
 
-    // op <<
+	// op <<
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
 };
 

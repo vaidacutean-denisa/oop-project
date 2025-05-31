@@ -15,8 +15,9 @@ class MessageDisplay {
 public:
 	MessageDisplay();
 
-	void displayMessage(std::string& message_, float displayDuration_, const sf::RenderWindow& window);
+	void displayMessage(const std::string& message_, float displayDuration_, const sf::RenderWindow& window, const float customY);
 	void updateMessage();
+	void clearMessage();
 
 	void drawMessage(sf::RenderWindow& window) const;
 	// bool isActive() const;

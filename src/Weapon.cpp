@@ -48,14 +48,13 @@ bool Weapon::shoot() {
         currentAmmo--;
         return true;
     }
-
-    std::cout << "Empty magazine. You're on your own now.";
+    // std::cout << "Empty magazine. You're on your own now.";
     return false;
 }
 
 void Weapon::reload() {                                                                 // trebuie modificat (e incomplet)
     currentAmmo += ammoCapacity - currentAmmo;
-    std::cout << "Weapon reloaded. Full magazine: " << ammoCapacity << '\n';
+    // std::cout << "Weapon reloaded. Full magazine: " << ammoCapacity << '\n';
 }
 
 float Weapon::getDamage() const { return damage; }

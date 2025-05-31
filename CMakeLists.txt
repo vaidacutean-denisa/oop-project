@@ -97,6 +97,12 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/Skeleton.h
     src/MessageDisplay.cpp
     headers/MessageDisplay.h
+    src/InventoryMenu.cpp
+    headers/InventoryMenu.h
+    src/WeaponManager.cpp
+    headers/WeaponManager.h
+    src/GameExceptions.cpp
+    headers/GameExceptions.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

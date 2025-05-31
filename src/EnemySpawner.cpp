@@ -8,33 +8,27 @@ EnemySpawner::EnemySpawner(std::vector<std::unique_ptr<Enemy>>* enemies_, float 
 	std::random_device rd;
 	generator.seed(rd());
 
-	if (!assetsManager.loadTexture("weakZombie", "assets/images/weakZombie.png")) {
-		std::cout << "Error loading weak zombie texture.\n";
-	}
+	assetsManager.loadTexture("weakZombie", "assets/images/weakZombie.png");
+	assetsManager.loadTexture("strongZombie", "assets/images/strongZombie.png");
+	assetsManager.loadTexture("skeleton", "assets/images/skeleton2.png");
 
-	if (!assetsManager.loadTexture("strongZombie", "assets/images/strongZombie.png")) {
-		std::cout << "Error loading strong zombie texture.\n";
-	}
-
-	if (!assetsManager.loadTexture("skeleton", "assets/images/skeleton2.png")) {
-		std::cout << "Error loading skeleton texture.\n";
-	}
-
-	if (!assetsManager.loadTexture("skeleton_projectile", "assets/images/skely_projectile2.png")) {
-		std::cout << "Error loading skeleton projectile texture.\n";
-	}
+	assetsManager.loadTexture("skeleton_projectile", "assets/images/skely_projectile2.png");
 
 	weakZombieTexture = assetsManager.getTexture("weakZombie");
 	strongZombieTexture = assetsManager.getTexture("strongZombie");
 	skeletonTexture = assetsManager.getTexture("skeleton");
 	skeletonProjectileTexture = assetsManager.getTexture("skeleton_projectile");
+
+	weakZombieTemplate = std::make_unique<WeakZombie>(weakZombieTexture);
+	strongZombieTemplate = std::make_unique<StrongZombie>(strongZombieTexture);
+	skeletonTemplate = std::make_unique<Skeleton>(skeletonTexture, skeletonProjectileTexture);
 }
 
 void EnemySpawner::update(const int currentLevel, const sf::RenderWindow& window) {
 	if (spawnClock.getElapsedTime().asSeconds() >= spawnInterval) {
 		spawnClock.restart();
 
-		spawnInterval = std::max(1.f, 7.f - static_cast<float>(currentLevel) * 0.5f);
+		spawnInterval = std::max(1.f, 6.f - static_cast<float>(currentLevel) * 0.5f);
 
 		const sf::Vector2u windowSize = window.getSize();
 		const auto windowWidth = static_cast<int>(windowSize.x);
@@ -46,38 +40,39 @@ void EnemySpawner::update(const int currentLevel, const sf::RenderWindow& window
 	    int currentLvlInt = static_cast<int>(currentLevel);
 		unsigned int option = 0;
 
+		std::unique_ptr<Enemy> newEnemy;
+
 		switch (currentLvlInt) {
 			case 1:
-				enemies->push_back(std::make_unique<WeakZombie>(assetsManager.getTexture("weakZombie")));
+				newEnemy = std::unique_ptr<Enemy>(weakZombieTemplate->clone());
 				break;
 			case 2:
 				option = generator() % 2;
 				if (option == 0)
-					enemies->push_back(std::make_unique<WeakZombie>(assetsManager.getTexture("weakZombie")));
+					newEnemy = std::unique_ptr<Enemy>(weakZombieTemplate->clone());
 				else
-					enemies->push_back(std::make_unique<StrongZombie>(assetsManager.getTexture("strongZombie")));
+                    newEnemy = std::unique_ptr<Enemy>(strongZombieTemplate->clone());
 				break;
 
 			case 3:
 				option = generator() % 3;
 				if (option == 0)
-					enemies->push_back(std::make_unique<WeakZombie>(assetsManager.getTexture("weakZombie")));
-
+					newEnemy = std::unique_ptr<Enemy>(weakZombieTemplate->clone());
 				else if (option == 1)
-					enemies->push_back(std::make_unique<StrongZombie>(assetsManager.getTexture("strongZombie")));
+					newEnemy = std::unique_ptr<Enemy>(strongZombieTemplate->clone());
 				else
-				enemies->push_back(std::make_unique<Skeleton>(assetsManager.getTexture("skeleton"),
-						assetsManager.getTexture("skeleton_projectile")));
+					newEnemy = std::unique_ptr<Enemy>(skeletonTemplate->clone());
 				break;
 			default:
 				std::cout << "Unknown level.\n";
-				break;
+				return;
 		}
 
-		const auto& enemy = enemies->back();
 	    auto x = static_cast<float>(distX(generator));
 	    auto y = static_cast<float>(distY(generator));
+		newEnemy->setPosition({x, y});
 
-		enemy->setPosition({x, y});
+		enemies->push_back(std::move(newEnemy));
+
 	}
 }
