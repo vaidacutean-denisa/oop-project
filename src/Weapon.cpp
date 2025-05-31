@@ -37,11 +37,11 @@ Weapon& Weapon::operator=(const Weapon& other) {
 //     std::cout << name << " shattered into a thousand pieces, its purpose fulfilled. (destructor weapon)\n";
 // }
 
-void Weapon::applyDamageBoost(float boostMultiplier) {
-    damage = damage * boostMultiplier;
-    std::cout << "Weapon damage boosted by x" << boostMultiplier <<" - time to show your enemies who's in charge.\n";
-    std::cout << "The updated damage is: " << damage << '\n';
-}
+// void Weapon::applyDamageBoost(float boostMultiplier) {
+//     damage = damage * boostMultiplier;
+//     std::cout << "Weapon damage boosted by x" << boostMultiplier <<" - time to show your enemies who's in charge.\n";
+//     std::cout << "The updated damage is: " << damage << '\n';
+// }
 
 bool Weapon::shoot() {
     if (currentAmmo > 0) {

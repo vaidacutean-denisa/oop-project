@@ -59,7 +59,7 @@ public:
 	void resetPlayerValues();
 
 	// getters & setters
-    float getHealth() const;
+    // float getHealth() const; momentan nu e folosita
     sf::Vector2f getPosition() const;
     std::vector<Bullet>& getBullets();
     const Weapon& getCurrentWeapon() const;

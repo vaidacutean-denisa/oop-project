@@ -25,7 +25,7 @@ public:
     Weapon& operator=(const Weapon& other);
 
     // methods
-    [[maybe_unused]] void applyDamageBoost(float boostMultiplier);
+    // [[maybe_unused]] void applyDamageBoost(float boostMultiplier); momentan nu este folosita
     bool shoot();
     void reload();
 

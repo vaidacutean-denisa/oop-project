@@ -193,7 +193,7 @@ void Player::resetPlayerValues() {
 	speed = normalSpeed;
 }
 
-float Player::getHealth() const { return health; }
+// float Player::getHealth() const { return health; }
 
 sf::Vector2f Player::getPosition() const {
 	return playerSprite.getPosition();
