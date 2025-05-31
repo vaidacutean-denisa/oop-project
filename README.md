@@ -6,14 +6,14 @@ Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-u
 (in lucru..)
 
 ## Comentarii 
-  - referitor la cerintele din tema 2: trebuie sa mai tratez exceptii + commit cu derivata noua, in rest CRED ca le am pe toate (voi mai verifica)
+  - referitor la cerintele din tema 2: trebuie sa fac commit cu noua derivata
   - am setat levelDuration din clasa levelManager la 10 secunde pentru a putea face verificari mai rapid (am uitat sa ii atribui valoarea default: ma gandesc sa las la 90 sau 120 de secunde)
     
 ### Features in dezvoltare
   - Integrarea unui sistem de colectare si / sau activare directa a perk-urilor la intersectia cu acestea (vor aparea random pe harta).
     ^(cel mai probabil ramane activare directa din motive mai mult sau mai putin evidente :)
   - Dezvoltarea unui meniu care sa afiseze informatii referitoare la armele din joc (la apasarea butonului Inventory din meniul principal)
-    ^^ implicit voi renunta la dialogul din terminal, intrucat ideea mea este sa pot alege arma din inventar; daca dau play fara sa aleg arma, ori primesc una default, ori nu continua jocul pana nu aleg eu
+    ^^ implicit voi renunta la dialogul din terminal, intrucat ideea mea este sa pot alege arma din inventar; daca dau play fara sa aleg arma, ori primesc una default, ori nu continua jocul pana nu aleg eu - ✅ rezolvat (daca jucatorul nu alege, i se atribuie implicit arma de la indexul 0)
 
 ### Probleme
  - Ar trebui sa implementez un sistem mai bun de detectare a coliziunilor, astfel incat sa nu se poata suprapune nici inamicii intre ei, nici jucatorul cu acestia
