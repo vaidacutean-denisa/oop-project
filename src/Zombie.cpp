@@ -2,23 +2,15 @@
 
 Zombie::Zombie(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition, float attackCooldown_)
                 : Enemy(health_, enemySpeed_, enemyPosition, attackCooldown_), zombieDamage(0) {
-	scalingFactor = 5.5f;
+	distanceScalingFactor = 5.5f;
 }
 
 void Zombie::updateEnemies(const sf::Vector2f& playerCenter, const sf::Vector2u& windowSize, const sf::Vector2f& playerSize) {
     followPlayer(playerCenter, windowSize, playerSize);
 }
 
-sf::Vector2f Zombie::getSize() const {
-    return enemySprite.getGlobalBounds().getSize();
-}
-
 float Zombie::getMinDistanceToPlayer(const sf::Vector2f &playerSize) {
-	return (playerSize.x + getSize().x) / scalingFactor;
-}
-
-float Zombie::getSpeed() const {
-    return enemySpeed;
+	return (playerSize.x + getSize().x) / distanceScalingFactor;
 }
 
 // void Zombie::updateHitbox() {

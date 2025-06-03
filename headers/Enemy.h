@@ -17,10 +17,12 @@ protected:
 	sf::Clock attackClock;
 	float attackCooldown;
 
-	float scalingFactor;
+	float distanceScalingFactor;
+	float hitboxScalingFactor;
 
 	// methods
 	virtual void drawImplementation(sf::RenderWindow& window) const = 0;
+	void followPlayer(const sf::Vector2f& playerCenter, const sf::Vector2u& windowSize, const sf::Vector2f& playerSize);
 
     // getters & setters
     const sf::Vector2f& getPosition() const;
@@ -28,7 +30,6 @@ protected:
 
 public:
     // constructors (initialization & cc)
-	Enemy() : health(100), enemySpeed(1.f), enemyPosition(0.f,0.f), attackCooldown(0.f), scalingFactor(1.f) {}
     Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition_, float attackCooldown_);
     Enemy(const Enemy& other);
 
@@ -47,7 +48,6 @@ public:
     void drawEnemies(sf::RenderWindow& window) const;
     // sf::Sprite& scaleEnemies();
 
-    virtual void followPlayer(const sf::Vector2f& playerPosition, const sf::Vector2u& windowSize, const sf::Vector2f& playerSize);
 	virtual float getMinDistanceToPlayer(const sf::Vector2f& playerSize) = 0;
 
 	virtual void updateEnemies(const sf::Vector2f& playerPosition, const sf::Vector2u& windowSize, const sf::Vector2f& playerSize) = 0;
@@ -60,10 +60,11 @@ public:
     bool isDead() const;
 
     // getters & setters
-    virtual float getSpeed() const;
     const sf::Sprite& getSprite() const;
-	virtual sf::Vector2f getSize() const = 0;
 	void setPosition(const sf::Vector2f& enemyPosition_);
+	float getSpeed() const;
+	sf::Vector2f getSize() const;
+	float getHitboxFactor() const;
 };
 
 #endif //ENEMY_H

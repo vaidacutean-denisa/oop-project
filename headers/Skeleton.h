@@ -31,9 +31,6 @@ public:
 	void drawProjectiles(sf::RenderWindow& window) const;
 
 	void drawImplementation(sf::RenderWindow& window) const override;
-
-	// getters & setters
-	sf::Vector2f getSize() const override;
 };
 
 #endif //SKELETON_H

@@ -92,6 +92,13 @@ void Player::rotatePlayer(float angle) {
 }
 
 void Player::shoot() {
+	isShooting = true;
+
+	if (!slowedByShooting) {
+		speed = normalSpeed * slowFactor;
+		slowedByShooting = true;
+	}
+
     if (shootingClock.getElapsedTime().asSeconds() >= shootCooldown) {                      // jucatorul are un shooting cooldown pentru a preveni spam-ul
         if (!weapons.empty()) {
             Weapon& currentWeapon = weapons[currentWeaponIndex];
@@ -112,16 +119,11 @@ void Player::shoot() {
 
             sf::Vector2f bulletPosition = position + rotatedOffset;
             bullets.emplace_back(bulletTexture, bulletSpeed, direction, bulletPosition);
-
-        	if (slowTimeLeft <= 0.f && !slowedByShooting) {
-        		speed = normalSpeed * slowFactor;
-        		slowedByShooting = true;
-        		slowTimer.restart();
-        	}
         }
         shootingClock.restart();
     }
 }
+
 
 void Player::drawShooting(sf::RenderWindow &window) const {
     for (const Bullet& bullet : bullets) {
@@ -164,10 +166,12 @@ void Player::applySlowness(const float slowMultiplier, const float slowDuration)
 }
 
 void Player::updateEffectStatus(float deltaTime) {
-	if (slowedByShooting && slowTimer.getElapsedTime().asSeconds() >= shootCooldown) {
+	if (!isShooting && slowedByShooting) {
 		slowedByShooting = false;
 		speed = normalSpeed;
 	}
+
+	isShooting = false;
 
 	if (slowTimeLeft > 0.f) {						// incetinirea cauzata de slow effect-ul de la strong zombie
 		slowTimeLeft -= deltaTime;

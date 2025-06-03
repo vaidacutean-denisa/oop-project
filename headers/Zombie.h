@@ -4,11 +4,6 @@
 #include "../headers/Enemy.h"
 
 class Zombie : public Enemy {
-
-    // getters & setters
-    sf::Vector2f getSize() const override;
-    float getSpeed() const override;
-
 protected:
 	float zombieDamage;
 

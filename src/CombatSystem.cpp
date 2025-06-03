@@ -9,7 +9,7 @@ std::vector<Bullet> CombatSystem::processBulletHits(const std::vector<Bullet>& b
         for (const auto& enemy : enemies) {
             sf::FloatRect enemyBounds = enemy->getSprite().getGlobalBounds();
 
-            const auto scalingFactor = 0.45f;
+            const auto scalingFactor = enemy->getHitboxFactor();
 
             float offsetX = enemyBounds.width * scalingFactor;
             float offsetY = enemyBounds.height * scalingFactor;

@@ -9,8 +9,10 @@ Skeleton::Skeleton(const sf::Texture& skeletonTexture, const sf::Texture& projec
 
 	collisionDamage = 4.f;
 	enemySprite.setPosition(enemyPosition);
-	scalingFactor = 1.5f;
+	distanceScalingFactor = 1.5f;
 	projectileDamage = 7.f;
+
+	hitboxScalingFactor = 0.7f;
 
 	enemySprite.setScale(0.45f, 0.45f);
 }
@@ -22,13 +24,8 @@ Skeleton::Skeleton(const Skeleton& other) : Enemy(other), collisionDamage(other.
 	enemySprite.setScale(other.enemySprite.getScale());
 }
 
-
-sf::Vector2f Skeleton::getSize() const {
-	return enemySprite.getGlobalBounds().getSize();
-}
-
 float Skeleton::getMinDistanceToPlayer(const sf::Vector2f &playerSize) {
-	return (playerSize.x + getSize().x) * scalingFactor;
+	return (playerSize.x + getSize().x) * distanceScalingFactor;
 }
 
 void Skeleton::updateEnemies(const sf::Vector2f& playerCenter, const sf::Vector2u& windowSize, const sf::Vector2f& playerSize) {

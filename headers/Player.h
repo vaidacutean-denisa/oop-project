@@ -26,6 +26,7 @@ class Player {
 	bool slowedByShooting;
 
 	float slowTimeLeft = 0.f;
+	bool isShooting = false;
 
 public:
     // constructors

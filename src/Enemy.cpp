@@ -4,7 +4,8 @@
 #include <memory>
 
 Enemy::Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition_, float attackCooldown_)
-    : health(health_), enemySpeed(enemySpeed_), enemyPosition(enemyPosition_), attackCooldown(attackCooldown_), scalingFactor(0)
+    : health(health_), enemySpeed(enemySpeed_), enemyPosition(enemyPosition_), attackCooldown(attackCooldown_), distanceScalingFactor(0),
+      hitboxScalingFactor(0)
 {
     // enemySprite.setTexture(texture_);
     enemySprite.setPosition(enemyPosition_);
@@ -14,7 +15,7 @@ Enemy::Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition
 }
 
 Enemy::Enemy(const Enemy& other) : health(other.health), enemySpeed(other.enemySpeed), enemyPosition(other.enemyPosition),
-	  attackCooldown(other.attackCooldown), scalingFactor(other.scalingFactor) {
+	  attackCooldown(other.attackCooldown), distanceScalingFactor(other.distanceScalingFactor), hitboxScalingFactor(other.hitboxScalingFactor) {
 }
 
 Enemy& Enemy::operator=(const Enemy& other) {
@@ -25,7 +26,7 @@ Enemy& Enemy::operator=(const Enemy& other) {
     	enemySprite = other.enemySprite;
     	attackClock = other.attackClock;
     	attackCooldown = other.attackCooldown;
-    	scalingFactor = other.scalingFactor;
+    	distanceScalingFactor = other.distanceScalingFactor;
     }
     return *this;
 }
@@ -137,6 +138,14 @@ void Enemy::setPosition(const sf::Vector2f& enemyPosition_) {
 
 float Enemy::getSpeed() const {
     return enemySpeed;
+}
+
+sf::Vector2f Enemy::getSize() const {
+	return enemySprite.getGlobalBounds().getSize();
+}
+
+float Enemy::getHitboxFactor() const {
+	return hitboxScalingFactor;
 }
 
 std::ostream& operator<<(std::ostream& os, const Enemy& enemy) {

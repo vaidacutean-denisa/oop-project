@@ -16,14 +16,21 @@ class EnemySpawner {
 	sf::Texture strongZombieTexture;
 	sf::Texture skeletonTexture;
 	sf::Texture skeletonProjectileTexture;
+	sf::Texture deathTexture;
 
 	std::unique_ptr<Enemy> weakZombieTemplate;
 	std::unique_ptr<Enemy> strongZombieTemplate;
 	std::unique_ptr<Enemy> skeletonTemplate;
+	std::unique_ptr<Enemy> deathTemplate;
 
 	std::mt19937 generator;
 
 	AssetsManager& assetsManager;
+
+	int tempFinalLevel = 4;
+	bool deathSpawned = false;
+
+	void spawnDeath(const sf::RenderWindow &window);
 
 public:
 	// constructor
@@ -31,6 +38,10 @@ public:
 
 	// methods
 	void update(int currentLevel, const sf::RenderWindow& window);
+
+	void resetDeathSpawn();
+
+	bool isDeathSpawned() const;
 
 };
 

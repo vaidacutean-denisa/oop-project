@@ -44,7 +44,7 @@ class Game {
 	int previousLevel;
 
 	MessageDisplay messageDisplay;
-	int tempFinalLevel = 4;
+	int tempFinalLevel = 5;
 
 	bool finalMessageShown;
 

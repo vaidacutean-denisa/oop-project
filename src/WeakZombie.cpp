@@ -6,6 +6,7 @@ WeakZombie::WeakZombie(const sf::Texture& weakZombieTexture) : Zombie(100.f, 4.f
     enemySprite.setScale(sf::Vector2f(1.7f, 1.7f));
 
 	zombieDamage = 6.f;
+	hitboxScalingFactor = 0.45f;
     // pentru debug
     // std::cout << "sprite size: " << getSprite().getGlobalBounds().width << "x" << getSprite().getGlobalBounds().height << std::endl;
 }

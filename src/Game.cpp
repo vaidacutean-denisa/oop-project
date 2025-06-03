@@ -187,7 +187,7 @@ void Game::updateRunning(const float deltaTime) {
 	messageDisplay.updateMessage();
 
 	if (levelManager.getCurrentLevel() >= tempFinalLevel) {
-		if (enemies.empty() && !player.isDead())
+		if (enemies.empty() && !player.isDead() && spawner->isDeathSpawned())
 			gameState = GameState::GameWin;
 	}
 
@@ -306,4 +306,5 @@ void Game::resetGame() {
 	enemies.clear();
 	player.resetPlayerValues();
 	enterPressed = false;
+	spawner->resetDeathSpawn();
 }

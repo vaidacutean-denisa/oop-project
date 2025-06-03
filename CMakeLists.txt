@@ -103,6 +103,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/WeaponManager.h
     src/GameExceptions.cpp
     headers/GameExceptions.h
+    src/Death.cpp
+    headers/Death.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

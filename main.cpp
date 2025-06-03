@@ -19,7 +19,7 @@ int main() {
 
 		Player player(100, 16.f, sf::Vector2f(350, 450),
 					 weaponManager.createPlayerWeapons(), playerTexture);
-		
+
 		// std::vector<Perks> listOfPerks = {                                          // ar putea fi clase derivate? (de revazut) + bonus de ammo crate (idee)
 		// 	Perks(6, 14, 0, "health"),
 		// 	Perks(4, 3, 10,"speed"),
