@@ -1,4 +1,4 @@
-#include "Death.h"
+#include "../headers/Death.h"
 
 Death::Death(const sf::Texture& deathTexture) : Enemy(350.f, 5.5f, {0, 0}, 2.f),
 			healAmount(5.f), collisionDamage(12.f), maxHealth(health) {
