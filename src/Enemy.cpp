@@ -15,8 +15,8 @@ Enemy::Enemy(float health_, float enemySpeed_, const sf::Vector2f& enemyPosition
 }
 
 Enemy::Enemy(const Enemy& other) : health(other.health), enemySpeed(other.enemySpeed), enemyPosition(other.enemyPosition),
-	  attackCooldown(other.attackCooldown), distanceScalingFactor(other.distanceScalingFactor), hitboxScalingFactor(other.hitboxScalingFactor) {
-}
+	  attackCooldown(other.attackCooldown), distanceScalingFactor(other.distanceScalingFactor),
+	  hitboxScalingFactor(other.hitboxScalingFactor) {}
 
 Enemy& Enemy::operator=(const Enemy& other) {
     if (this != &other) {
@@ -27,6 +27,7 @@ Enemy& Enemy::operator=(const Enemy& other) {
     	attackClock = other.attackClock;
     	attackCooldown = other.attackCooldown;
     	distanceScalingFactor = other.distanceScalingFactor;
+    	hitboxScalingFactor = other.hitboxScalingFactor
     }
     return *this;
 }
