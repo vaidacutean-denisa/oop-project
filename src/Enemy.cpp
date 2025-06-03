@@ -27,7 +27,7 @@ Enemy& Enemy::operator=(const Enemy& other) {
     	attackClock = other.attackClock;
     	attackCooldown = other.attackCooldown;
     	distanceScalingFactor = other.distanceScalingFactor;
-    	hitboxScalingFactor = other.hitboxScalingFactor
+    	hitboxScalingFactor = other.hitboxScalingFactor;
     }
     return *this;
 }
