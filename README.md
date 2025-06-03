@@ -6,20 +6,17 @@ Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-u
 (in lucru..)
 
 ## Comentarii 
-  - referitor la cerintele din tema 2: trebuie sa fac commit cu noua derivata
+  - modificarile aduse in ultimul release, pe langa adaugarea noii clase derivate (Death), vizeaza imbunatatirea hitbox-ului si a functiei followPlayer din clasa Enemy
   - am setat levelDuration din clasa levelManager la 10 secunde pentru a putea face verificari mai rapid (am uitat sa ii atribui valoarea default: ma gandesc sa las la 90 sau 120 de secunde)
     
 ### Features in dezvoltare
   - Integrarea unui sistem de colectare si / sau activare directa a perk-urilor la intersectia cu acestea (vor aparea random pe harta).
     ^(cel mai probabil ramane activare directa din motive mai mult sau mai putin evidente :)
-  - Dezvoltarea unui meniu care sa afiseze informatii referitoare la armele din joc (la apasarea butonului Inventory din meniul principal)
-
-    ^^ implicit voi renunta la dialogul din terminal, intrucat ideea mea este sa pot alege arma din inventar; daca dau play fara sa aleg arma, ori primesc una default, ori nu continua jocul pana nu aleg eu - ✅ rezolvat (daca jucatorul nu alege, i se atribuie implicit arma de la indexul 0)
 
 ### Probleme
  - Ar trebui sa implementez un sistem mai bun de detectare a coliziunilor, astfel incat sa nu se poata suprapune nici inamicii intre ei, nici jucatorul cu acestia
  - Nu am reusit sa determin inamicii sa se orienteze cu fata catre jucator
- - trebuie sa fac mici modificari in ceea ce priveste hitbox-ul inamicilor 
+ - trebuie sa fac mici modificari in ceea ce priveste hitbox-ul inamicilor ✅
  - Probabil din cauza modului in care am incercat sa tratez pozitionarea inamicilor in raport cu jucatorul si coliziunile, acestia lasa impresia ca s-ar teleporta pe harta (nu e asa rau cum suna)
  - trebuie sa gestionez mai bine afisarea mesajelor informative (din message manager + ordinea de display message din game.cpp)
  - (nota) Primeam seg fault din cauza modului in care tratam avansarea in nivel, acum ar trebui sa fie in regula
