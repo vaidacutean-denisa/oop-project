@@ -1,11 +1,11 @@
 #include "../headers/Death.h"
 
-Death::Death(const sf::Texture& deathTexture) : Enemy(350.f, 5.5f, {0, 0}, 2.f),
+Death::Death(const sf::Texture& deathTexture) : Enemy(350.f, 6.f, {0, 0}, 2.f),
 			healAmount(5.f), collisionDamage(12.f), maxHealth(health) {
 	enemySprite.setTexture(deathTexture);
 	enemySprite.setPosition(enemyPosition);
 
-	enemySprite.setScale(0.8f, 0.8f);
+	enemySprite.setScale(0.9f, 0.9f);
 	hitboxScalingFactor = 0.8f;
 	distanceScalingFactor = 0.2f;
 }

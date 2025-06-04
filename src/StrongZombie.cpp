@@ -6,7 +6,7 @@ StrongZombie::StrongZombie(const sf::Texture& strongZombieTexture) : Zombie(180.
 	enemySprite.setTexture(strongZombieTexture);
 	enemySprite.setScale(0.7f, 0.7f);
 	zombieDamage = 10.f;
-	hitboxScalingFactor = 1.f;
+	hitboxScalingFactor = 0.85f;
 }
 
 StrongZombie::StrongZombie(const StrongZombie& other)
