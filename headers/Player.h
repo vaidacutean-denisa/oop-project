@@ -81,7 +81,6 @@ public:
 
 	void activateTemporaryShield(float duration);
 	void deactivateShield();
-	bool isShieldActive() const;
 
 	void startRegeneration(float totalTicks, float amountPerTick);
 	void updateRegeneration();

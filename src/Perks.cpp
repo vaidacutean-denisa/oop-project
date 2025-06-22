@@ -1,7 +1,7 @@
 #include "../headers/Perks.h"
 
-Perks::Perks(sf::Vector2f position_, float duration_, std::string type_, const sf::Texture& texture)
-	: position(position_), duration(duration_), type(std::move(type_)) {
+Perks::Perks(sf::Vector2f position_, std::string type_, const sf::Texture& texture)
+	: position(position_), type(std::move(type_)) {
 	perkSprite.setTexture(texture);
 	perkSprite.setPosition(position);
 	perkSprite.setScale(4.f, 4.f);

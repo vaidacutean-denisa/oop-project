@@ -1,6 +1,6 @@
 #include "../headers/Game.h"
 
-#include "PerkManager.h"
+#include "../headers/PerkManager.h"
 #include "../headers/Skeleton.h"
 #include "../headers/GameExceptions.h"
 #include "../headers/LevelManager.h"
@@ -205,7 +205,7 @@ void Game::updatePlayer(const float deltaTime) {
 	}
 
 	if (LevelManager::getInstance().getCurrentLevel() >= tempFinalLevel) {
-		if (enemies.empty() && !player.isDead() && spawner->isDeathSpawned()) {
+		if (enemies.empty() && spawner->isDeathSpawned()) {
 			gameState = GameState::GameWin;
 		}
 	}

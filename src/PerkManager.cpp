@@ -5,7 +5,7 @@
 #include "../headers/PerkManager.h"
 #include <random>
 
-#include "RegenerationDecorator.h"
+#include "../headers/RegenerationDecorator.h"
 #include "../headers/MessageDisplay.h"
 #include "../headers/ShieldDecorator.h"
 
@@ -30,7 +30,7 @@ void PerkManager::spawnPerk(const sf::Vector2u& windowSize) {
 	sf::Vector2f randomPos(dx(gen), dy(gen));
 	sf::Texture& texture = assetsManager.getTexture(randomType + "Perk");
 
-	std::unique_ptr<BasePerk> perk = std::make_unique<Perks>(randomPos, 10.f, randomType, texture);
+	std::unique_ptr<BasePerk> perk = std::make_unique<Perks>(randomPos, randomType, texture);
 
 	std::uniform_int_distribution chanceDecorator(0, 1);
 

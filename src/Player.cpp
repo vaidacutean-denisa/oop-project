@@ -209,10 +209,6 @@ void Player::deactivateShield() {
 	shieldActive = false;
 }
 
-bool Player::isShieldActive() const {
-	return shieldActive;
-}
-
 void Player::startRegeneration(float totalTicks, float amountPerTick) {
 	isRegenActive = true;
 	regenTicksRemaining = totalTicks;

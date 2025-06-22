@@ -24,6 +24,7 @@ Weapon& Weapon::operator=(const Weapon& other) {
     if (this != &other) {
         name = other.name;
         damage = other.damage;
+    	baseDamage = other.damage;
         reloadTime = other.reloadTime;
         ammoCapacity = other.ammoCapacity;
         currentAmmo = other.currentAmmo;

@@ -9,13 +9,12 @@
 
 class Perks : public BasePerk {
 	sf::Vector2f position;
-    float duration;
     std::string type;
 	sf::Sprite perkSprite;
 
 public:
     // constructors
-    Perks(sf::Vector2f position_, float duration_, std::string type_, const sf::Texture& texture_);
+    Perks(sf::Vector2f position_, std::string type_, const sf::Texture& texture_);
 
     // methods
 	void applyPerk(Player &player, const MessageManager &messageManager, MessageDisplay &messageDisplay, const sf::RenderWindow &window) const override;

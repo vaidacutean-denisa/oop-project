@@ -26,11 +26,9 @@ public:
 
     // getter
     std::string getLabel() const;
-	T getLabelData() const { return labelData; }
-	void setLabelData(const T& data) { labelData = data; }
 	const sf::RectangleShape& getButtonShape() const { return button; }
 
-	T getValue() const;
+	T& getValue() const;
 };
 
 template <typename T>
