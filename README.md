@@ -3,23 +3,12 @@
 ## Descriere 
 Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-un timp limitat. Incepi cu o arma de baza si trebuie sa elimini inamicii care devin tot mai puternici pe masura ce avansezi. Pe parcurs, poti obtine noi arme, munitie si bonusuri care iti imbunatatesc abilitatile (sanatate, viteza, putere de atac). Fiecare nivel ofera o provocare tot mai mare, iar succesul depinde de gestionarea atenta a resurselor si a timpului.
 
-(in lucru..)
-
-## Comentarii 
-  - modificarile aduse in ultimul release, pe langa adaugarea noii clase derivate (Death), vizeaza imbunatatirea hitbox-ului si a functiei followPlayer din clasa Enemy
-  - am setat levelDuration din clasa levelManager la 10 secunde pentru a putea face verificari mai rapid (am uitat sa ii atribui valoarea default: ma gandesc sa las la 90 sau 120 de secunde)
-    
 ### Features in dezvoltare
-  - Integrarea unui sistem de colectare si / sau activare directa a perk-urilor la intersectia cu acestea (vor aparea random pe harta).
-    ^(cel mai probabil ramane activare directa din motive mai mult sau mai putin evidente :)
+ - Implementarea unui meniu de endgame
 
 ### Probleme
  - Ar trebui sa implementez un sistem mai bun de detectare a coliziunilor, astfel incat sa nu se poata suprapune nici inamicii intre ei, nici jucatorul cu acestia
  - Nu am reusit sa determin inamicii sa se orienteze cu fata catre jucator
- - trebuie sa fac mici modificari in ceea ce priveste hitbox-ul inamicilor ✅
- - Probabil din cauza modului in care am incercat sa tratez pozitionarea inamicilor in raport cu jucatorul si coliziunile, acestia lasa impresia ca s-ar teleporta pe harta (nu e asa rau cum suna)
- - trebuie sa gestionez mai bine afisarea mesajelor informative (din message manager + ordinea de display message din game.cpp)
- - (nota) Primeam seg fault din cauza modului in care tratam avansarea in nivel, acum ar trebui sa fie in regula
 
 ## Gameplay
 ### Movement 
@@ -47,6 +36,7 @@ Am folosit următoarele resurse:
 - pentru textura inamicilor: tipurile de zombie de pe OpenGame Art si skeleton-ul de pe pinterest (revin cu link-uri daca le mai gasesc)
 - pentru textura gloanțelor: https://dinopixel.com/bullet-pixel-art-42595
 - pentru textura proiectilelor inamicilor de tip Skeleton: https://www.vhv.rs/viewpic/iobbxmo_heart-pixel-art-hd-png-download/
+- pentru textura perk-urilor: https://opengameart.org/content/simple-potion-animations
 - pentru muzica de fundal: Higher Octane – Vans in Japan (din YouTube Audio Library, fără drepturi de autor)
 - pentru font: Google Fonts - SedanSC-Regular, Google Fonts - BlackOpsOne-Regular
 - pentru imaginile din background / battlefield: OpenGame Art (revin cu link-uri)
