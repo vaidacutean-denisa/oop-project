@@ -17,8 +17,9 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stan
     backgroundSprite = assetsManager.getScaledSprite("background", window.getSize());
     battlefieldSprite = assetsManager.getScaledSprite("battlefield", window.getSize());
 
-    if (!backgroundMusic.openFromFile("assets/music/music.mp3"))
-    	throw ResourceLoadException("music.mp3");
+    if (!backgroundMusic.openFromFile("assets/music/music.mp3")) {
+	    throw ResourceLoadException("music.mp3");
+    }
 
 	backgroundMusic.setLoop(true);
 	backgroundMusic.setVolume(20);

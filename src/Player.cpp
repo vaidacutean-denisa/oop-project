@@ -271,9 +271,12 @@ void Player::clearBullets() {
 }
 
 void Player::resetPlayerValues() {
-	health = 100;
+	health = maxHealthVisual;
 	position = {0.f, 0.f};
 	speed = normalSpeed;
+
+	updateHealthBar();
+	healthBar.setFillColor(sf::Color(14, 97, 29));
 }
 
 void Player::updateHealthBar() {

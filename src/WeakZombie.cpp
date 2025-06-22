@@ -1,6 +1,6 @@
 #include "../headers/WeakZombie.h"
 
-WeakZombie::WeakZombie(const sf::Texture& weakZombieTexture) : Zombie(100.f, 4.f, {0.f, 0.f}, 1.5f)
+WeakZombie::WeakZombie(const sf::Texture& weakZombieTexture) : Zombie(100.f, 4.6f, {0.f, 0.f}, 1.5f)
 {
 	enemySprite.setTexture(weakZombieTexture);
     enemySprite.setScale(sf::Vector2f(1.7f, 1.7f));

@@ -46,7 +46,7 @@ void EnemySpawner::update(const int currentLevel, const sf::RenderWindow& window
 		std::uniform_int_distribution<int> distX(0, windowWidth - 1);
 		std::uniform_int_distribution<int> distY(0, windowHeight - 1);
 
-	    int currentLvlInt = static_cast<int>(currentLevel);
+	    int currentLvlInt = currentLevel;
 		unsigned int option = 0;
 
 		std::unique_ptr<Enemy> newEnemy;
@@ -64,6 +64,7 @@ void EnemySpawner::update(const int currentLevel, const sf::RenderWindow& window
 				break;
 
 			case 3:
+			case 4:
 				option = generator() % 3;
 				if (option == 0)
 					newEnemy = std::unique_ptr<Enemy>(weakZombieTemplate->clone());

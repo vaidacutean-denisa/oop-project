@@ -14,8 +14,14 @@ void ShieldDecorator::applyPerk(Player &player, const MessageManager &messageMan
 	PerkDecorator::applyPerk(player, messageManager, messageDisplay, window);
 
 	player.activateTemporaryShield(15.f);
+	std::string shieldMessage = messageManager.getEventMessage("perk_shield");
+	messageDisplay.displayMessage(shieldMessage, 3.f, window, 45.f);
 }
 
 void ShieldDecorator::draw(sf::RenderWindow &window) const {
 	window.draw(shieldSprite);
+}
+
+bool ShieldDecorator::decoratorMessage() const {
+	return true;
 }

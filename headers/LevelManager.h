@@ -27,7 +27,7 @@ class LevelManager : public Singleton<LevelManager> {
     float levelDuration;
 
 	// constructor
-	LevelManager() : currentLevel(1), levelTimer(0.f), levelDuration(10.f) {}
+	LevelManager() : currentLevel(1), levelTimer(0.f), levelDuration(35.f) {}
 
 public:
     // methods

@@ -28,7 +28,7 @@ public:
     std::string getLabel() const;
 	const sf::RectangleShape& getButtonShape() const { return button; }
 
-	T& getValue() const;
+	const T& getValue() const;
 };
 
 template <typename T>

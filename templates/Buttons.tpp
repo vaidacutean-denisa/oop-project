@@ -56,7 +56,7 @@ std::string Buttons<T>::getLabel() const {
 }
 
 template <typename T>
-T& Buttons<T>::getValue() const {
+const T& Buttons<T>::getValue() const {
     return labelData;
 }
 

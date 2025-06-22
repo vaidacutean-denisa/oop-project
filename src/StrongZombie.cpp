@@ -1,6 +1,6 @@
 #include "../headers/StrongZombie.h"
 
-StrongZombie::StrongZombie(const sf::Texture& strongZombieTexture) : Zombie(180.f, 5.f, {0.f, 0.f}, 2.3f),
+StrongZombie::StrongZombie(const sf::Texture& strongZombieTexture) : Zombie(180.f, 4.2f, {0.f, 0.f}, 2.3f),
 			slowMultiplier(0.15f), slowDuration(1.3f), isEnraged(false)
 {
 	enemySprite.setTexture(strongZombieTexture);

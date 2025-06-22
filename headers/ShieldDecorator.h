@@ -17,6 +17,8 @@ public:
 	// methods
 	void applyPerk(Player &player, const MessageManager &messageManager, MessageDisplay &messageDisplay, const sf::RenderWindow &window) const override;
 	void draw(sf::RenderWindow& window) const override;
+
+	bool decoratorMessage() const override;
 };
 
 #endif //SHIELDDECORATOR_H

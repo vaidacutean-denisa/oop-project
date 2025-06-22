@@ -20,6 +20,7 @@ MessageManager::MessageManager() :
 		{"perk_speed", "Tactical sprint authorized. Still a bad idea to run in circles.\n"},
 		{"perk_damage", "Firepower recalibrated. Precision still recommended.\n"},
 		{"perk_regen", "Recovery loop initiated. Even machines envy this tech.\n"},
+		{"perk_shield", "Shield activated. Protecting you from your own tactical genius.\n"},
 		{"default", "Unrecorded anomaly detected. Orders pending... or missing.\n"},
 		{"gameOver", "Mission terminated. File closed with questions pending.\nYou've proved one thing: limits still exist.\n"},
 		{"gameWin", "Mission accomplished. You've succeeded where most would have failed. The victory's yours.\n"},
