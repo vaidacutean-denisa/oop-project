@@ -32,7 +32,7 @@ void InventoryMenu::createWeaponSlots() {
     float boxSize = 250;
     float padding = 70;
 
-    int rows = 2;			// pentru grid 2x2
+    int rows = 2;
     int cols = 2;
 
 	float totalWidth = static_cast<float>(cols) * boxSize + static_cast<float>(cols - 1) * padding;
@@ -41,19 +41,18 @@ void InventoryMenu::createWeaponSlots() {
     float startX = background.getPosition().x + (background.getSize().x - totalWidth) / 2;
     float startY = background.getPosition().y + (background.getSize().y - totalHeight) / 2;
 
-    for(size_t i = 0; i < weapons.size(); ++i) {
+    for (size_t i = 0; i < weapons.size(); ++i) {
     	int row = static_cast<int>(i) / cols;
     	int col = static_cast<int>(i) % cols;
     	float x = startX + static_cast<float>(col) * (boxSize + padding);
     	float y = startY + static_cast<float>(row) * (boxSize + padding);
 
-        sf::RectangleShape slot;
-        slot.setSize(sf::Vector2f(boxSize, boxSize));
-        slot.setPosition(x, y);
-        slot.setFillColor(sf::Color(100, 90, 80));
-        slot.setOutlineColor(sf::Color::Black);
-        slot.setOutlineThickness(2);
-        weaponSlots.push_back(slot);
+    	Buttons<int> button(
+    	    {boxSize, boxSize}, {x, y}, "", font,
+    	    sf::Color(100, 90, 80), sf::Color(120, 110, 95), sf::Color(80, 70, 60),
+    	    sf::Color::Black, 2.f, static_cast<int>(i));
+
+    	weaponButtons.push_back(button);
 
         if (weaponTextures.contains(weapons[i]->getWeaponName())) {
             sf::Sprite sprite;
@@ -84,7 +83,7 @@ void InventoryMenu::createWeaponSlots() {
 }
 
 void InventoryMenu::clearContainers() {
-	weaponSlots.clear();
+	weaponButtons.clear();
 	weaponSprites.clear();
 	weaponLabels.clear();
 	textures.clear();
@@ -93,8 +92,8 @@ void InventoryMenu::clearContainers() {
 void InventoryMenu::drawInventory(sf::RenderWindow& window) const {
     window.draw(background);
 
-    for(const auto& slot : weaponSlots)
-        window.draw(slot);
+	for(const auto& button : weaponButtons)
+		button.drawButton(window);
 
     for(const auto& sprite : weaponSprites)
         window.draw(sprite);
@@ -110,11 +109,8 @@ void InventoryMenu::setPosition(float x, float y) {
 }
 
 int InventoryMenu::handleClick(const sf::Vector2f& mousePosition) const {
-	for (size_t i = 0; i < weaponSlots.size(); ++i) {
-		if (weaponSlots[i].getGlobalBounds().contains(sf::Vector2f(mousePosition)))
-			return static_cast<int>(i);
-	}
-	return -1;
+	auto clicked = getClickedButton(weaponButtons, mousePosition);
+	return clicked ? clicked->getValue() : -1;
 }
 
 void InventoryMenu::centerInWindow(const sf::RenderWindow& window) {

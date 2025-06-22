@@ -5,14 +5,14 @@
 
 constexpr float pi = 3.1415f;
 
-Player::Player(float health_, float speed_, sf::Vector2f position_, const std::vector<Weapon>& weapons_, const sf::Texture& playerTexture_)
-    : health(health_), speed(speed_), normalSpeed(speed_), position(position_), currentWeaponIndex(0), weapons(weapons_),
-      shootCooldown(0.3f), slowFactor(0.5f), slowedByShooting(false) {
+Player::Player(float health_, float speed_, const sf::Vector2f position_, const std::vector<Weapon>& weapons_, const sf::Texture& playerTexture_)
+    : health(health_), maxHealthVisual(health_), maxHealth(150.f), speed(speed_), normalSpeed(speed_), baseSpeed(normalSpeed),  position(position_),
+	  currentWeaponIndex(0), weapons(weapons_), shootCooldown(0.3f), slowFactor(0.5f), slowedByShooting(false), shieldDuration(10.f) {
 
     playerSprite.setTexture(playerTexture_);
     playerSprite.setScale(0.6f, 0.6f);
 
-    sf::FloatRect bounds = playerSprite.getLocalBounds();                                   // (floatRect -> abstractizarea unui dreptunghi; sf::RectangleShape este un obiect desenabil)
+    const sf::FloatRect bounds = playerSprite.getLocalBounds();                             // (floatRect -> abstractizarea unui dreptunghi; sf::RectangleShape este un obiect desenabil)
     playerSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);                    // calculeaza originea sprite-ului astfel incat punctul de referinta al acestuia sa fie in centru
                                                                                             // punctul de referinta este implicit in coltul stanga sus -> comportament neasteptat la rotire
     updateSpritePosition();
@@ -20,9 +20,20 @@ Player::Player(float health_, float speed_, sf::Vector2f position_, const std::v
     if (!bulletTexture.loadFromFile("assets/images/bullet.png")) {
         std::cerr << "Failed to load bullet texture!" << std::endl;
     }
+
+	healthBarBackground.setSize(sf::Vector2f(healthBarWidth, healthBarHeight));
+	healthBarBackground.setFillColor(sf::Color(97, 27, 14));
+	healthBarBackground.setPosition(position_ - sf::Vector2f(0.f, 20.f));
+
+	healthBarBackground.setOutlineThickness(2.f);
+	healthBarBackground.setOutlineColor(sf::Color::Black);
+
+	healthBar.setSize(sf::Vector2f(healthBarWidth, healthBarHeight));
+	healthBar.setFillColor(sf::Color(14, 97, 29));
+	healthBar.setPosition(position_ - sf::Vector2f(0.f, 20.f));
 }
 
-void Player::selectWeapon(int index) {
+void Player::selectWeapon(const int index) {
 	if (weapons.empty()) {
 		throw PlayerException("No weapons available in inventory");
 	}
@@ -39,32 +50,49 @@ void Player::selectWeapon(int index) {
 	currentWeaponIndex = index;
 }
 
-// void Player::applyDamageBoost(const float boostMultiplier) {
-//     if (!weapons.empty()) {
-//         weapons[currentWeaponIndex].applyDamageBoost(boostMultiplier);
-//     }
-// }
-//
-// void Player::applyHealthBoost(float boostAmount) {
-//     constexpr int maxHealth = 150;
-//     if (health < maxHealth)                                                     // suppose maxhealth = 150 (to be reviewed)
-//         health += boostAmount;
-// }
-//
-// void Player::applySpeedBoost(float boostAmount) {
-//     speed += boostAmount;
-// }
+void Player::applyDamageBoost(const float boostMultiplier) {
+	if (!damageBoostActive) {
+		if (!weapons.empty()) {
+			weapons[currentWeaponIndex].applyDamageBoost(boostMultiplier);
+		}
+
+		damageBoostActive = true;
+		damageBoostClock.restart();
+	}
+}
+
+void Player::applyHealthBoost(const float boostAmount) {
+	health = std::min(health + boostAmount, maxHealth);
+	updateHealthBar();
+}
+
+void Player::applySpeedBoost(const float boostAmount) {
+	if (!speedBoostActive) {
+		baseSpeed += boostAmount;
+
+		speed = baseSpeed;
+		speedBoostActive = true;
+		speedBoostClock.restart();
+	}
+}
 
 void Player::drawPlayer(sf::RenderWindow& window) const {
     window.draw(playerSprite);
 }
 
 void Player::updateSpritePosition() {
-    playerSprite.setPosition(position.x, position.y);
+	playerSprite.setPosition(position);
+
+	sf::FloatRect spriteBounds = playerSprite.getGlobalBounds();
+
+	float barX = spriteBounds.left + spriteBounds.width / 2.f - healthBarBackground.getSize().x / 2.f;
+	float barY = spriteBounds.top - 15.f;
+
+	healthBarBackground.setPosition(barX, barY);
+	healthBar.setPosition(barX, barY);
 }
 
 void Player::movePlayer(float dx, float dy, const sf::RenderWindow& window) {
-
     float length = std::sqrt(dx * dx + dy * dy);                              // |v| = sqrt(dx^2 + dy^2), lungimea unui vector
     if (length != 0) {
         dx /= length;                                                           // normalizare; impart coordonatele vectorului la lungimea lui astfel incat |v_normalizat| = 1
@@ -95,7 +123,7 @@ void Player::shoot() {
 	isShooting = true;
 
 	if (!slowedByShooting) {
-		speed = normalSpeed * slowFactor;
+		speed = baseSpeed * slowFactor;
 		slowedByShooting = true;
 	}
 
@@ -131,7 +159,7 @@ void Player::drawShooting(sf::RenderWindow &window) const {
     }
 }
 
-void Player::processBullets(float deltaTime, const sf::RenderWindow& window) {
+void Player::processBullets(const float deltaTime, const sf::RenderWindow& window) {
     for (Bullet& bullet : bullets)
         bullet.updateBullet(deltaTime);
 
@@ -151,11 +179,17 @@ sf::Vector2f Player::getCenterPosition() const {
 	};
 }
 
-void Player::takeDamage(float amount) {
+void Player::takeDamage(const float amount) {
+	if (shieldActive)
+		return;
+
 	health -= amount;
+
 	if (health < 0.f) {
 		health = 0.f;
 	}
+
+	updateHealthBar();
 }
 
 void Player::applySlowness(const float slowMultiplier, const float slowDuration) {
@@ -165,12 +199,47 @@ void Player::applySlowness(const float slowMultiplier, const float slowDuration)
 	}
 }
 
+void Player::activateTemporaryShield(float duration) {
+	shieldActive = true;
+	shieldDuration = duration;
+	shieldClock.restart();
+}
+
+void Player::deactivateShield() {
+	shieldActive = false;
+}
+
+bool Player::isShieldActive() const {
+	return shieldActive;
+}
+
+void Player::startRegeneration(float totalTicks, float amountPerTick) {
+	isRegenActive = true;
+	regenTicksRemaining = totalTicks;
+	regenAmountPerTick = amountPerTick;
+	regenClock.restart();
+}
+
+void Player::updateRegeneration() {
+	if (isRegenActive && regenTicksRemaining > 0) {
+		if (regenClock.getElapsedTime() >= regenInterval) {
+			if (health < maxHealthVisual)
+				applyHealthBoost(regenAmountPerTick);
+
+			regenTicksRemaining--;
+			regenClock.restart();
+		}
+	}
+
+	if (regenTicksRemaining == 0)
+		isRegenActive = false;
+}
+
 void Player::updateEffectStatus(float deltaTime) {
 	if (!isShooting && slowedByShooting) {
 		slowedByShooting = false;
-		speed = normalSpeed;
+		speed = baseSpeed;
 	}
-
 	isShooting = false;
 
 	if (slowTimeLeft > 0.f) {						// incetinirea cauzata de slow effect-ul de la strong zombie
@@ -180,6 +249,20 @@ void Player::updateEffectStatus(float deltaTime) {
 			if (!slowedByShooting)
 				speed = normalSpeed;
 		}
+	}
+
+	if (speedBoostActive && speedBoostClock.getElapsedTime().asSeconds() >= 10.f) {
+		baseSpeed = normalSpeed;
+		speedBoostActive = false;
+	}
+
+	if (damageBoostActive && damageBoostClock.getElapsedTime().asSeconds() >= 10.f) {
+		weapons[currentWeaponIndex].resetDamage();
+		damageBoostActive = false;
+	}
+
+	if (shieldActive && shieldClock.getElapsedTime().asSeconds() >= shieldDuration) {
+		deactivateShield();
 	}
 }
 
@@ -197,7 +280,17 @@ void Player::resetPlayerValues() {
 	speed = normalSpeed;
 }
 
-// float Player::getHealth() const { return health; }
+void Player::updateHealthBar() {
+	float healthToDisplay = std::min(health, maxHealthVisual);
+	healthBar.setSize(sf::Vector2f(healthBarWidth * (healthToDisplay / maxHealthVisual), healthBarHeight));				// pentru a limita vizual bara de HP
+}
+
+void Player::drawHealthBar(sf::RenderWindow& window) const {
+	window.draw(healthBarBackground);
+	window.draw(healthBar);
+}
+
+float Player::getHealth() const { return health; }
 
 sf::Vector2f Player::getPosition() const {
 	return playerSprite.getPosition();
@@ -215,7 +308,7 @@ sf::Sprite Player::getSprite() const {
 	return playerSprite;
 }
 
-std::vector<Weapon *> Player::getWeapons() {
+std::vector<Weapon*> Player::getWeapons() {
 	std::vector<Weapon*> weaponPtr;
 
 	for (auto& weapon : weapons)

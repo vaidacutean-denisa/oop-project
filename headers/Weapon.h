@@ -12,6 +12,7 @@ class Weapon {
     float currentAmmo;              // cate gloante are pe incarcator
     Ammunition ammo;                // tipul de gloante folosite
     float bulletSpeed;
+	float baseDamage;
 
 public:
     // constructors (initialization & cc)
@@ -25,8 +26,11 @@ public:
     Weapon& operator=(const Weapon& other);
 
     // methods
-    // [[maybe_unused]] void applyDamageBoost(float boostMultiplier); momentan nu este folosita
-    bool shoot();
+    void applyDamageBoost(float boostMultiplier);
+
+	void resetDamage();
+
+	bool shoot();
     void reload();
 
     // op <<

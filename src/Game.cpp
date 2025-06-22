@@ -1,10 +1,12 @@
 #include "../headers/Game.h"
+
+#include "PerkManager.h"
 #include "../headers/Skeleton.h"
 #include "../headers/GameExceptions.h"
+#include "../headers/LevelManager.h"
 
 Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stand: Undead Uprising", sf::Style::Default),
-                            menu(window), player(player_), messageManager(), levelManager(),
-							previousLevel(0), messageDisplay(), gameState(GameState::Menu)
+                            menu(window), player(player_), messageDisplayDuration(5.f), previousLevel(0), gameState(GameState::Menu)
  {
     window.setVerticalSyncEnabled(true);
 
@@ -18,12 +20,10 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stan
     if (!backgroundMusic.openFromFile("assets/music/music.mp3"))
     	throw ResourceLoadException("music.mp3");
 
-    else {
-        backgroundMusic.setLoop(true);
-        backgroundMusic.setVolume(20);
-    }
+	backgroundMusic.setLoop(true);
+	backgroundMusic.setVolume(20);
 
-    font = assetsManager.getFont("font");
+	font = assetsManager.getFont("font");
 
     exitMessage.setFont(font);
     exitMessage.setCharacterSize(18);
@@ -39,6 +39,13 @@ Game::Game(Player& player_) : window(sf::VideoMode({1920, 1200}), "The Last Stan
 
 	inventoryMenu = std::make_unique<InventoryMenu>(player.getWeapons());
 	inventoryMenu->centerInWindow(window);
+
+	assetsManager.loadTexture("healthPerk", "assets/images/perk_health.png");
+	assetsManager.loadTexture("speedPerk", "assets/images/perk_speed.png");
+	assetsManager.loadTexture("damagePerk", "assets/images/perk_damage.png");
+	assetsManager.loadTexture("shieldPerk", "assets/images/enchanted_golden_apple.png");
+
+	perkManager = std::make_unique<PerkManager>(assetsManager);
 }
 
 void Game::handleMusic() {
@@ -88,12 +95,15 @@ void Game::handleInput() {
 					std::string clickedButton = menu.handleClick(sf::Mouse::getPosition(window));
 					if (clickedButton == "Play") {
 						if (!weaponSelected)
-							messageDisplay.displayMessage("Select a weapon first!", 2.f, window, 80.f);
+							messageDisplay.displayMessage("Select a weapon first!", messageDisplayDuration, window, 80.f);
 						else
 							gameState = GameState::GameRunning;
 					}
-					if (clickedButton == "Inventory")
+					if (clickedButton == "Inventory") {
 						gameState = GameState::Inventory;
+						std::string message = messageManager.getEventMessage("inventoryMsg");
+						messageDisplay.displayMessage(message, messageDisplayDuration, window, 60.f);
+					}
 
 					if (clickedButton == "Exit")
 						window.close();
@@ -105,6 +115,7 @@ void Game::handleInput() {
 						player.selectWeapon(selectedWeapon);
 						weaponSelected = true;
 						gameState = GameState::Menu;
+						messageDisplay.clearMessage();
 					}
 				}
 			}
@@ -115,8 +126,10 @@ void Game::handleInput() {
 
 		if (event.type == sf::Event::KeyPressed) {
 			if (event.key.code == sf::Keyboard::Escape) {
-				if (gameState == GameState::Inventory)
+				if (gameState == GameState::Inventory) {
 					gameState = GameState::Menu;
+					messageDisplay.clearMessage();
+				}
 				else
 					window.close();
 			}
@@ -148,6 +161,14 @@ void Game::updateGame(const float deltaTime) {
 }
 
 void Game::updateRunning(const float deltaTime) {
+	handlePlayerInput();
+	updatePlayer(deltaTime);
+	updateLevel(deltaTime);
+	updateEnemies(deltaTime);
+	updatePerks();
+}
+
+void Game::handlePlayerInput() const {
 	float dx = 0.f, dy = 0.f;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -169,31 +190,51 @@ void Game::updateRunning(const float deltaTime) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		player.shoot();
 
-	player.updateEffectStatus(deltaTime);
 	player.movePlayer(dx, dy, window);
+}
+
+void Game::updatePlayer(const float deltaTime) {
+	if (player.getHealth() <= 25.f) {
+		const std::string message = messageManager.getEventMessage("lowHP");
+		messageDisplay.displayMessage(message, messageDisplayDuration, window, 45.f);
+	}
+
+	if (player.isDead()) {
+		endGame(GameState::GameOver);
+		return;
+	}
+
+	if (LevelManager::getInstance().getCurrentLevel() >= tempFinalLevel) {
+		if (enemies.empty() && !player.isDead() && spawner->isDeathSpawned()) {
+			gameState = GameState::GameWin;
+		}
+	}
+
+	player.updateEffectStatus(deltaTime);
 	player.updateSpritePosition();
 	player.processBullets(deltaTime, window);
+	player.updateRegeneration();
+}
 
-	levelManager.updateLevel(deltaTime);
+void Game::updateLevel(const float deltaTime) {
+	LevelManager::getInstance().updateLevel(deltaTime);
 
-	int currentLevel = levelManager.getCurrentLevel();
+	int currentLevel = LevelManager::getInstance().getCurrentLevel();
 
 	if (currentLevel != previousLevel) {
 		previousLevel = currentLevel;
 		std::string levelMessage = messageManager.getLevelMessage(currentLevel);
-
-		messageDisplay.displayMessage(levelMessage, 5.f, window, 45.f);
+		messageDisplay.displayMessage(levelMessage, messageDisplayDuration, window, 45.f);
 	}
+
 	messageDisplay.updateMessage();
+}
 
-	if (levelManager.getCurrentLevel() >= tempFinalLevel) {
-		if (enemies.empty() && !player.isDead() && spawner->isDeathSpawned())
-			gameState = GameState::GameWin;
-	}
-
-	spawner->update(levelManager.getCurrentLevel(), window);
+void Game::updateEnemies(const float deltaTime) {
+	spawner->update(LevelManager::getInstance().getCurrentLevel(), window);
 
 	sf::Vector2f playerCenter = player.getCenterPosition();
+
 	for (auto& enemy : enemies) {
 		enemy->updateEnemies(playerCenter, window.getSize(), player.getPlayerSize());
 		enemy->resolveCollision(enemies);
@@ -204,17 +245,18 @@ void Game::updateRunning(const float deltaTime) {
 		}
 	}
 
-	CombatSystem::handleCombat(player.getBullets(), enemies, player.getCurrentWeapon());
+	CombatSystem::handleCombat(player.getBullets(), enemies, player.getCurrentWeapon(), *perkManager, window.getSize());
+}
 
-	if (player.isDead())
-		endGame(GameState::GameOver);
+void Game::updatePerks() {
+	perkManager->update(player, messageManager, messageDisplay, window);
 }
 
 void Game::checkEndings() {
 	if (!finalMessageShown) {
 		if (player.isDead())
 			endGame(GameState::GameOver);
-		else if (levelManager.getCurrentLevel() >= tempFinalLevel && enemies.empty())
+		else if (LevelManager::getInstance().getCurrentLevel() >= tempFinalLevel && enemies.empty())
 			endGame(GameState::GameWin);
 	}
 }
@@ -232,15 +274,15 @@ void Game::endGame(GameState endState) {
 	else
 		endMessage = messageManager.getEventMessage("gameOver");
 
-	messageDisplay.displayMessage(endMessage, 7.f, window, 45.f);
+	messageDisplay.displayMessage(endMessage, messageDisplayDuration + 2.f, window, 45.f);
 	if (endState == GameState::GameWin) {
-		std::string epilogue = messageManager.getEventMessage("epilogue");
-		messageDisplay.displayMessage(epilogue, 8.f, window, 45.f);
+		std::string gameWin = messageManager.getEventMessage("gameWin");
+		messageDisplay.displayMessage(gameWin, messageDisplayDuration + 2.f, window, 45.f);
 	}
 
 	finalMessageShown = true;
 
-	// std::string restartMessage = messageManager.getEventMessage("restart");
+	// std::string restartMessage = messageManager.getEventMessage("restart");		trebuie sa fac modificari aici: fereastra de ending
 	// messageDisplay.displayMessage(restartMessage, 5.f, window);
 }
 
@@ -253,6 +295,9 @@ void Game::drawGame() {
     	if (const auto skeleton = dynamic_cast<const Skeleton*>(enemy.get()))
     		skeleton->drawProjectiles(window);
     }
+
+	perkManager->draw(window);
+
 	messageDisplay.drawMessage(window);
 }
 
@@ -277,6 +322,7 @@ void Game::runGame() {
 		else if (gameState == GameState::Inventory) {
 			window.draw(backgroundSprite);
 			inventoryMenu->drawInventory(window);
+			messageDisplay.drawMessage(window);
 		}
 		else {
 			updateGame(deltaTime);
@@ -285,6 +331,7 @@ void Game::runGame() {
 
 			if (gameState == GameState::GameRunning) {
 				player.drawPlayer(window);
+				player.drawHealthBar(window);
 			}
 		}
 
@@ -302,9 +349,11 @@ void Game::resetGame() {
 	finalMessageShown = false;
 	messageDisplay.clearMessage();
 
-	levelManager.resetLevel();
+	LevelManager::getInstance().resetLevel();
 	enemies.clear();
 	player.resetPlayerValues();
 	enterPressed = false;
 	spawner->resetDeathSpawn();
+
+	perkManager->reset();
 }

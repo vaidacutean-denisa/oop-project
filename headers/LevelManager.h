@@ -1,21 +1,37 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 
-#include "../headers/MessageManager.h"
+template <typename T>
+class Singleton {
+protected:
+	Singleton() = default;
+	~Singleton() = default;
 
-class LevelManager {
+	Singleton(const Singleton&) = delete;
+	Singleton& operator=(const Singleton&) = delete;
+	Singleton(Singleton&&) = delete;
+	Singleton& operator=(Singleton&&) = delete;
+
+public:
+	static T& getInstance() {
+		static T instance;
+		return instance;
+	}
+};
+
+class LevelManager : public Singleton<LevelManager> {
+	friend class Singleton;
+
     int currentLevel;
     float levelTimer;
     float levelDuration;
 
-public:
-    // constructor
-    explicit LevelManager();
+	// constructor
+	LevelManager() : currentLevel(1), levelTimer(0.f), levelDuration(10.f) {}
 
+public:
     // methods
     void updateLevel(float deltaTime);
-    // void displayLevelMessage() const;
-    // void setLevelDuration(float newDuration);
 	void resetLevel();
 
     // getters & setters

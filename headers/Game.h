@@ -5,11 +5,11 @@
 #include "../headers/AssetsManager.h"
 #include "../headers/CombatSystem.h"
 #include "../headers/EnemySpawner.h"
-#include "../headers/LevelManager.h"
 #include "../headers/Menu.h"
 #include "../headers/Player.h"
 #include "../headers/MessageDisplay.h"
 #include "../headers/InventoryMenu.h"
+#include "../headers/PerkManager.h"
 
 enum class GameState {
 	Menu,
@@ -40,7 +40,7 @@ class Game {
 	bool enterPressed = false;
 
     MessageManager messageManager;
-    LevelManager levelManager;
+	float messageDisplayDuration;
 	int previousLevel;
 
 	MessageDisplay messageDisplay;
@@ -52,10 +52,22 @@ class Game {
 	std::unique_ptr<InventoryMenu> inventoryMenu;
 	bool weaponSelected = false;
 
+	sf::Texture healthPerkTexture;
+	sf::Texture speedPerkTexture;
+	sf::Texture damagePerkTexture;
+	std::unique_ptr<PerkManager> perkManager;
+
 	void handleMusic();
 	void handleInput();
 
 	void updateGame(float deltaTime);
+
+	void handlePlayerInput() const;
+	void updatePlayer(float deltaTime);
+	void updateLevel(float deltaTime);
+	void updateEnemies(float deltaTime);
+	void updatePerks();
+
 	void updateRunning(float deltaTime);
 
 	void checkEndings();

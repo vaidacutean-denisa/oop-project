@@ -30,7 +30,7 @@ Menu::Menu(const sf::RenderWindow& window) {
 		                        startY + static_cast<float>(i)*(buttonSize.y + padding) + visualOffsetY);
 
 		menuButtons.emplace_back(buttonSize, position, labels[i], font, idleColor, hoveredColor, clickedColor,
-								 outlineColor, outlineThickness);
+								 outlineColor, outlineThickness, labels[i]);
 	}
 }
 

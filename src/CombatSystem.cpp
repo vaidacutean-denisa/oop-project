@@ -11,8 +11,8 @@ std::vector<Bullet> CombatSystem::processBulletHits(const std::vector<Bullet>& b
 
             const auto scalingFactor = enemy->getHitboxFactor();
 
-            float offsetX = enemyBounds.width * scalingFactor;
-            float offsetY = enemyBounds.height * scalingFactor;
+            const float offsetX = enemyBounds.width * scalingFactor;
+            const float offsetY = enemyBounds.height * scalingFactor;
 
             sf::FloatRect hitbox(
                 enemyBounds.left + offsetX,
@@ -33,19 +33,29 @@ std::vector<Bullet> CombatSystem::processBulletHits(const std::vector<Bullet>& b
     return activeBullets;
 }
 
-void CombatSystem::removeDeadEnemies(std::vector<std::unique_ptr<Enemy>>& enemies) {
-    auto it = enemies.begin();
+int CombatSystem::removeDeadEnemies(std::vector<std::unique_ptr<Enemy> > &enemies) {
+	int enemiesKilled = 0;
+
+	auto it = enemies.begin();
     while (it != enemies.end()) {
-        if ((*it)->isDead())
-            it = enemies.erase(it);
+        if ((*it)->isDead()) {
+	        it = enemies.erase(it);
+			enemiesKilled++;
+        }
         else
             ++it;
     }
+
+	return enemiesKilled;
 }
 
-void CombatSystem::handleCombat(std::vector<Bullet>& bullets, std::vector<std::unique_ptr<Enemy>>& enemies, const Weapon& currentWeapon) {
-    float damage = currentWeapon.getDamage();
+void CombatSystem::handleCombat(std::vector<Bullet>& bullets, std::vector<std::unique_ptr<Enemy>>& enemies, const Weapon& currentWeapon, PerkManager& perkManager, const sf::Vector2u& windowSize) {
+	float damage = currentWeapon.getDamage();
 
     bullets = processBulletHits(bullets, enemies, damage);
-    removeDeadEnemies(enemies);
+    int enemiesKilled = removeDeadEnemies(enemies);
+
+	for (int i = 0; i < enemiesKilled; i++) {
+		perkManager.onEnemyKilled(windowSize);
+	}
 }

@@ -8,9 +8,19 @@
 
 class Player {
     float health;
+	float maxHealthVisual;
+	float maxHealth;															// cu perks poate ajunge la 150hp, dar bara de hp sa ramana la 100 practic
+
+	sf::RectangleShape healthBarBackground;
+	sf::RectangleShape healthBar;
+	float healthBarWidth = 100.f;
+	float healthBarHeight = 10.f;
+
     float speed;
     float normalSpeed;                                                          // pentru a reveni la viteza normala dupa ce trage
-    sf::Vector2f position;
+	float baseSpeed;
+
+	sf::Vector2f position;
 
     int currentWeaponIndex;
     std::vector<Weapon> weapons;
@@ -27,6 +37,22 @@ class Player {
 
 	float slowTimeLeft = 0.f;
 	bool isShooting = false;
+
+	sf::Clock speedBoostClock;
+	bool speedBoostActive = false;
+
+	sf::Clock damageBoostClock;
+	bool damageBoostActive = false;
+
+	bool shieldActive = false;
+	float shieldDuration;
+	sf::Clock shieldClock;
+
+	sf::Clock regenClock;														// pentru regeneration (perk)
+	sf::Time regenInterval = sf::seconds(0.5f);							// la cate secunde se aplica regenerarea
+	bool isRegenActive = false;
+	float regenTicksRemaining = 0;					    				    	// de cate ori se aplica regenerarea
+	float regenAmountPerTick = 0;									    		// cat HP se aplica la fiecare regenerare
 
 public:
     // constructors
@@ -52,6 +78,14 @@ public:
 
 	void takeDamage(float amount);
 	void applySlowness(const float slowMultiplier, const float slowDuration);
+
+	void activateTemporaryShield(float duration);
+	void deactivateShield();
+	bool isShieldActive() const;
+
+	void startRegeneration(float totalTicks, float amountPerTick);
+	void updateRegeneration();
+
 	void updateEffectStatus(float deltaTime);
 
 	bool isDead() const;
@@ -59,8 +93,11 @@ public:
 	void clearBullets();
 	void resetPlayerValues();
 
+	void updateHealthBar();
+	void drawHealthBar(sf::RenderWindow& window) const;
+
 	// getters & setters
-    // float getHealth() const; momentan nu e folosita
+    float getHealth() const;
     sf::Vector2f getPosition() const;
     std::vector<Bullet>& getBullets();
     const Weapon& getCurrentWeapon() const;

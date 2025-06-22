@@ -1,30 +1,53 @@
 #include "../headers/Perks.h"
 
-std::ostream& operator<<(std::ostream& os, const Perks& perk) {
-    os << "Perks - Type: " << perk.type << '\n'
-       << "Position: (" << perk.x << ", " << perk.y << ")" << '\n'
-       << "Duration: " << perk.duration << " seconds";
-    return os;
+Perks::Perks(sf::Vector2f position_, float duration_, std::string type_, const sf::Texture& texture)
+	: position(position_), duration(duration_), type(std::move(type_)) {
+	perkSprite.setTexture(texture);
+	perkSprite.setPosition(position);
+	perkSprite.setScale(4.f, 4.f);
+
+	const sf::FloatRect bounds = perkSprite.getLocalBounds();
+	perkSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
 
-// void Perks::applyPerk(Player& player) const {
-//     if (type == "health") {
-//         player.applyHealthBoost(20);
-//         // std::cout << "Health boost applied.\n";
-//         if (player.getHealth() > 75)
-//             std::cout << "You're at " << player.getHealth() << " health. You're in good shape!\n";
-//         else if (player.getHealth() > 35)
-//             std::cout << "You've got " << player.getHealth() << " health. Keep pushing!\n";
-//         else
-//             std::cout << player.getHealth() << " health left. You're hanging by a thread, but hey, it's a strong thread! Maybe avoid the next hit?\n";
-//     }
-//     else if (type == "speed") {
-//         player.applySpeedBoost(4.5f);
-//         std::cout << "Speed boost activated. Time to leave everyone in the dust.\n";
-//     }
-//     else {
-//         player.applyDamageBoost(1.5f);
-//         std::cout << "Your hits just got a bit more.. convincing.\n";
-//     }
-// }
+void Perks::applyPerk(Player& player, const MessageManager& messageManager, MessageDisplay& messageDisplay, const sf::RenderWindow& window) const {
+	std::string message;
+	const float messageDuration = 3.f;
+	const float messageCustomY = 45.f;
 
+	if (type == "health") {
+		player.applyHealthBoost(20);
+		float hp = player.getHealth();
+
+		if (hp > 75)
+			message = messageManager.getEventMessage("perk_highHP");
+		else if (hp > 35)
+			message = messageManager.getEventMessage("perk_midHP");
+		else
+			message = messageManager.getEventMessage("perk_lowHP");
+
+		messageDisplay.displayMessage(message, messageDuration, window, messageCustomY);
+	}
+	else if (type == "speed") {
+		player.applySpeedBoost(4.5f);
+		message = messageManager.getEventMessage("perk_speed");
+		messageDisplay.displayMessage(message, messageDuration, window, messageCustomY);
+	}
+	else if (type == "damage") {
+		player.applyDamageBoost(1.5f);
+		message = messageManager.getEventMessage("perk_damage");
+		messageDisplay.displayMessage(message, messageDuration, window, messageCustomY);
+	}
+	else {
+		message = messageManager.getEventMessage("default");
+		messageDisplay.displayMessage(message, messageDuration, window, messageCustomY);
+	}
+}
+
+void Perks::draw(sf::RenderWindow& window) const {
+	window.draw(perkSprite);
+}
+
+sf::FloatRect Perks::getBounds() const {
+	return perkSprite.getGlobalBounds();
+}

@@ -4,7 +4,7 @@
 #include "Buttons.h"
 
 class Menu {
-	std::vector<Buttons> menuButtons;
+	std::vector<Buttons<std::string>> menuButtons;
 	sf::Font font;
 
 public:

@@ -71,7 +71,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/Enemy.h
     src/Perks.cpp
     headers/Perks.h
-    src/Buttons.cpp
+    templates/Buttons.tpp
     headers/Buttons.h
     src/Menu.cpp
     headers/Menu.h
@@ -105,6 +105,15 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/GameExceptions.h
     src/Death.cpp
     headers/Death.h
+    src/PerkManager.cpp
+    headers/PerkManager.h
+    headers/BasePerk.h
+    src/PerkDecorator.cpp
+    headers/PerkDecorator.h
+    src/ShieldDecorator.cpp
+    headers/ShieldDecorator.h
+    src/RegenerationDecorator.cpp
+    headers/RegenerationDecorator.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

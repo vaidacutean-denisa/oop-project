@@ -9,12 +9,13 @@
 
 class InventoryMenu {
 	std::vector<Weapon*> weapons;
-	std::vector<sf::RectangleShape> weaponSlots;
+	// std::vector<sf::RectangleShape> weaponSlots;
+	std::vector<Buttons<int>> weaponButtons;
 	std::vector<sf::Sprite> weaponSprites;
 	std::vector<sf::Text> weaponLabels;
 
 	sf::Font font;
-	std::vector<Buttons> inventoryButtons;
+	std::vector<Buttons<std::string>> inventoryButtons;
 	sf::RectangleShape background;
 	std::map<std::string, sf::Texture> weaponTextures;
 	std::vector<sf::Texture> textures;

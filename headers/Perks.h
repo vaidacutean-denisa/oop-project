@@ -2,22 +2,26 @@
 #define PERKS_H
 
 #include <string>
-#include "Player.h"
+#include "../headers/MessageDisplay.h"
+#include "../headers/MessageManager.h"
+#include "../headers/Player.h"
+#include "../headers/BasePerk.h"
 
-class Perks {
-    float x, y;                     // de inlocuit cu vector pentru pozitie
-    float duration;                 // concept doar teoretic so far
-    std::string  type;
+class Perks : public BasePerk {
+	sf::Vector2f position;
+    float duration;
+    std::string type;
+	sf::Sprite perkSprite;
 
 public:
     // constructors
-    Perks(float x_, float y_, float duration_, std::string  type_) : x(x_), y(y_), duration(duration_), type(std::move(type_)) {}
+    Perks(sf::Vector2f position_, float duration_, std::string type_, const sf::Texture& texture_);
 
     // methods
-    void applyPerk(Player& player) const;
+	void applyPerk(Player &player, const MessageManager &messageManager, MessageDisplay &messageDisplay, const sf::RenderWindow &window) const override;
+	void draw(sf::RenderWindow& window) const override;
 
-    // op <<
-    friend std::ostream& operator<<(std::ostream& os, const Perks& perk);
+	sf::FloatRect getBounds() const override;
 };
 
 

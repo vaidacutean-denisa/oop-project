@@ -12,7 +12,7 @@ std::ostream& operator<<(std::ostream& os, const Weapon& weapon) {
 
 Weapon::Weapon(std::string  name_, float dmg_, float rTime_, float capacity_, float currentAmmo_, Ammunition  ammo_)
     : name(std::move(name_)), damage(dmg_), reloadTime(rTime_), ammoCapacity(capacity_),
-      currentAmmo(currentAmmo_), ammo(std::move(ammo_)), bulletSpeed(1450) { }
+      currentAmmo(currentAmmo_), ammo(std::move(ammo_)), bulletSpeed(1450), baseDamage(dmg_) { }
 
 // Weapon::Weapon(const Weapon& other) : name(other.name), damage(other.damage), reloadTime(other.reloadTime),
 //                                         ammoCapacity(other.ammoCapacity), currentAmmo(other.currentAmmo), ammo(other.ammo)
@@ -37,11 +37,13 @@ Weapon& Weapon::operator=(const Weapon& other) {
 //     std::cout << name << " shattered into a thousand pieces, its purpose fulfilled. (destructor weapon)\n";
 // }
 
-// void Weapon::applyDamageBoost(float boostMultiplier) {
-//     damage = damage * boostMultiplier;
-//     std::cout << "Weapon damage boosted by x" << boostMultiplier <<" - time to show your enemies who's in charge.\n";
-//     std::cout << "The updated damage is: " << damage << '\n';
-// }
+void Weapon::applyDamageBoost(float boostMultiplier) {
+    damage = damage * boostMultiplier;
+}
+
+void Weapon::resetDamage() {
+	damage = baseDamage;
+}
 
 bool Weapon::shoot() {
     if (currentAmmo > 0) {

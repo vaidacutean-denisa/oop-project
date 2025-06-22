@@ -18,7 +18,7 @@ public:
 	WeaponManager();
 
 	// methods
-	std::vector<Weapon> createPlayerWeapons();
+	std::vector<Weapon> createPlayerWeapons() const;
 };
 
 #endif //WEAPONMANAGER_H

@@ -1,10 +1,5 @@
 #include "../headers/LevelManager.h"
 
-#include <iostream>
-
-LevelManager::LevelManager()
-    : currentLevel(1), levelTimer(0.f), levelDuration(10.f) {}
-
 void LevelManager::updateLevel(const float deltaTime) {
 	if (currentLevel > 5)
 		return;
