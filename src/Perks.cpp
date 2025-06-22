@@ -52,7 +52,3 @@ void Perks::draw(sf::RenderWindow& window) const {
 sf::FloatRect Perks::getBounds() const {
 	return perkSprite.getGlobalBounds();
 }
-
-bool Perks::decoratorMessage() const {
-	return false;
-}
