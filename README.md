@@ -40,7 +40,7 @@ Jucătorul se poate deplasa folosind tastele W, A, S, D sau săgețile direcțio
 - Esc: închide fereastra de joc.
 - Enter: reîncepe jocul după ce s-a terminat (indiferent dacă a fost câștigat sau nu)
 
-
+##
 ## [EN]
 The Last Stand: Undead Uprising is a 2D shooter game developed in C++ using the SFML library (version 2.6). Its architecture follows object-oriented programming principles, ensuring a clear and extensible code structure.
 *The project was developed as part of academic coursework at the university.*
