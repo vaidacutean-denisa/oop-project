@@ -1,4 +1,4 @@
-# The Last Stand: Undead Uprising
+# The Last Stand: Undead Uprising 🪦
 
 ## [RO]
 ## Descriere 
@@ -11,12 +11,12 @@ La început, jucătorul are posibilitatea de a selecta una dintre cele patru arm
 
 Pe parcurs, vor apărea pe hartă, aleatoriu, poțiuni ce oferă jucătorului efecte temporare, precum îmbunătățirea vitezei, refacerea sănătății sau creșterea puterii de atac, susținând astfel o diversificare și adaptare eficientă a strategiilor de joc.
 
-Pentru toate detaliile și o experiență completă, te încurajez să te aventurezi în joc. Mulțumesc și distracție plăcută! :) 
+Pentru toate detaliile și o experiență completă, te încurajez să te aventurezi în joc. Mulțumesc și distracție plăcută! 😊
 
-### Features in dezvoltare
+### Features in dezvoltare ⚙️
  - Implementarea unui meniu de endgame
 
-### Probleme
+### Probleme 🔻
  - Ar trebui să implementez un sistem mai bun de detectare a coliziunilor, astfel încât să nu se poată suprapune nici inamicii între ei, nici jucătorul cu aceștia
  - Nu am reușit sa determin inamicii să se orienteze cu fața către jucător
 
@@ -51,7 +51,7 @@ At the start, the player can choose one of four available weapons: AK-47, M416, 
 
 Throughout the game, potions spawn randomly on the map, granting temporary effects such as increased movement speed, health regeneration, or enhanced attack power, encouraging varied and adaptive combat strategies.
 
-For all the details and the full experience, I invite you to immerse yourself in the game. Thank you, and enjoy! :)
+For all the details and the full experience, I invite you to immerse yourself in the game. Thank you, and enjoy! 😊
 
 ## Gameplay
 ### Movement 
@@ -200,7 +200,7 @@ Observație: folderele `build/` și `install_dir/` sunt adăugate în fișierul 
 conțin fișiere generate și nu ne ajută să le versionăm.
 
 
-## Resurse
+## Resurse 🔍
 
 Am folosit următoarele resurse:
 - [SFML](https://github.com/SFML/SFML/tree/2.6.1) (Zlib)
