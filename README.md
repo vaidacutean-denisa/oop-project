@@ -1,14 +1,22 @@
 # The Last Stand: Undead Uprising
 
+## [RO]
 ## Descriere 
-Un joc de tip shooter in care jucatorul se confrunta cu valuri de inamici intr-un timp limitat. Incepi cu o arma de baza si trebuie sa elimini inamicii care devin tot mai puternici pe masura ce avansezi. Pe parcurs, poti obtine noi arme, munitie si bonusuri care iti imbunatatesc abilitatile (sanatate, viteza, putere de atac). Fiecare nivel ofera o provocare tot mai mare, iar succesul depinde de gestionarea atenta a resurselor si a timpului.
+The Last Stand: Undead Uprising este un joc de tip shooter 2D, dezvoltat în C++ cu ajutorul bibliotecii SFML (versiunea 2.6). Arhitectura jocului respectă principiile programării orientate pe obiect, asigurând o structură clară și extensibilă a codului. 
+*Proiectul a fost realizat ca parte a activității academice universitare.*
+
+Jocul propune o experiență dinamică în care jucătorul trebuie să supraviețuiască valurilor succesive de inamici, generați progresiv pe durata fiecărui nivel. Acțiunea se desfășoară pe o hartă fixă, iar dificultatea crește treptat, atât prin numărul, cât și prin complexitatea inamicilor, pe măsură ce personajul avansează. 
+La început, jucătorul are posibilitatea de a selecta una dintre cele patru arme disponibile: AK-47, M416, Shotgun sau Pistol, fiecare având particularități ce determină stilul de joc și strategiile de luptă împotriva celor patru tipuri de inamici. 
+Pe parcurs, vor apărea pe hartă, aleatoriu, poțiuni ce oferă jucătorului efecte temporare, precum îmbunătățirea vitezei, refacerea sănătății sau creșterea puterii de atac, susținând astfel o diversificare și adaptare eficientă a strategiilor de joc.
+
+Pentru toate detaliile și o experiență completă, te încurajez să te aventurezi în joc. Mulțumesc și distracție plăcută! :) 
 
 ### Features in dezvoltare
  - Implementarea unui meniu de endgame
 
 ### Probleme
- - Ar trebui sa implementez un sistem mai bun de detectare a coliziunilor, astfel incat sa nu se poata suprapune nici inamicii intre ei, nici jucatorul cu acestia
- - Nu am reusit sa determin inamicii sa se orienteze cu fata catre jucator
+ - Ar trebui să implementez un sistem mai bun de detectare a coliziunilor, astfel încât să nu se poată suprapune nici inamicii între ei, nici jucătorul cu aceștia
+ - Nu am reușit sa determin inamicii să se orienteze cu fața către jucător
 
 ## Gameplay
 ### Movement 
@@ -30,18 +38,39 @@ Jucătorul se poate deplasa folosind tastele W, A, S, D sau săgețile direcțio
 - Esc: închide fereastra de joc.
 - Enter: reîncepe jocul după ce s-a terminat (indiferent dacă a fost câștigat sau nu)
 
-## Resurse 
-Am folosit următoarele resurse:
-- pentru textura jucătorului: https://opengameart.org/content/animated-top-down-survivor-player
-- pentru textura inamicilor: tipurile de zombie de pe OpenGame Art si skeleton-ul de pe pinterest (revin cu link-uri daca le mai gasesc)
-- pentru textura gloanțelor: https://dinopixel.com/bullet-pixel-art-42595
-- pentru textura proiectilelor inamicilor de tip Skeleton: https://www.vhv.rs/viewpic/iobbxmo_heart-pixel-art-hd-png-download/
-- pentru textura perk-urilor: https://opengameart.org/content/simple-potion-animations
-- pentru muzica de fundal: Higher Octane – Vans in Japan (din YouTube Audio Library, fără drepturi de autor)
-- pentru font: Google Fonts - SedanSC-Regular, Google Fonts - BlackOpsOne-Regular
-- pentru imaginile din background / battlefield: OpenGame Art (revin cu link-uri)
 
-  
+## [EN]
+The Last Stand: Undead Uprising is a 2D shooter game developed in C++ using the SFML library (version 2.6). Its architecture follows object-oriented programming principles, ensuring a clear and extensible code structure.
+*The project was developed as part of academic coursework at the university.*
+
+The game offers a dynamic experience in which the player must survive successive waves of enemies progressively generated throughout each level. The action unfolds on a fixed map, with difficulty increasing steadily through both the number and complexity of enemies.
+At the start, the player can choose one of four available weapons: AK-47, M416, Shotgun, or Pistol, each with unique characteristics that influence the gameplay and combat strategy against four distinct enemy types.
+Throughout the game, potions spawn randomly on the map, granting temporary effects such as increased movement speed, health regeneration, or enhanced attack power, encouraging varied and adaptive combat strategies.
+
+For all the details and the full experience, I invite you to immerse yourself in the game. Thank you, and enjoy! :)
+
+## Gameplay
+### Movement 
+The player can move using the W, A, S, D keys or the arrow keys, as follows:
+- W / Up Arrow: move forward
+- A / Left Arrow: move left
+- S / Down Arrow: move backward
+- D / Right Arrow: move right
+
+### Combat
+- Spacebar: fires the selected weapon
+
+### Audio Manager
+M: toggles background music on/off
+=: increases music volume by two units
+-: decreases music volume by two units
+
+### General
+- Esc: closes the game window
+- Enter: restarts the game after it ends (whether the player wins or loses)
+
+
+### Cerințele proiectului 
 ### Tema 0
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
@@ -169,6 +198,14 @@ conțin fișiere generate și nu ne ajută să le versionăm.
 
 ## Resurse
 
+Am folosit următoarele resurse:
 - [SFML](https://github.com/SFML/SFML/tree/2.6.1) (Zlib)
   - [OpenAL](https://openal-soft.org/) (LGPL): din cauza licenței, trebuie distribuită ca shared library
-- adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit
+- pentru textura jucătorului: https://opengameart.org/content/animated-top-down-survivor-player
+- pentru textura inamicilor: tipurile de zombie de pe OpenGame Art si skeleton-ul de pe pinterest (revin cu link-uri dacă le mai gasesc)
+- pentru textura gloanțelor: https://dinopixel.com/bullet-pixel-art-42595
+- pentru textura proiectilelor inamicilor de tip Skeleton: https://www.vhv.rs/viewpic/iobbxmo_heart-pixel-art-hd-png-download/
+- pentru textura perk-urilor: https://opengameart.org/content/simple-potion-animations
+- pentru muzica de fundal: Higher Octane – Vans in Japan (din YouTube Audio Library, fără drepturi de autor)
+- pentru font: Google Fonts - SedanSC-Regular, Google Fonts - BlackOpsOne-Regular
+- pentru imaginile din background / battlefield: OpenGame Art (revin cu link-uri)
