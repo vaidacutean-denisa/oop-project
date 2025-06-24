@@ -73,8 +73,8 @@ M: toggles background music on/off
 - Esc: closes the game window
 - Enter: restarts the game after it ends (whether the player wins or loses)
 
-
-### Cerințele proiectului 
+##
+## Cerințele proiectului 
 ### Tema 0
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
