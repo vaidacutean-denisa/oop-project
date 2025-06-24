@@ -1,4 +1,4 @@
-# The Last Stand: Undead Uprising 🪦
+# The Last Stand: Undead Uprising 
 
 ## [RO]
 ## Descriere 
