@@ -6,7 +6,9 @@ The Last Stand: Undead Uprising este un joc de tip shooter 2D, dezvoltat în C++
 *Proiectul a fost realizat ca parte a activității academice universitare.*
 
 Jocul propune o experiență dinamică în care jucătorul trebuie să supraviețuiască valurilor succesive de inamici, generați progresiv pe durata fiecărui nivel. Acțiunea se desfășoară pe o hartă fixă, iar dificultatea crește treptat, atât prin numărul, cât și prin complexitatea inamicilor, pe măsură ce personajul avansează. 
+
 La început, jucătorul are posibilitatea de a selecta una dintre cele patru arme disponibile: AK-47, M416, Shotgun sau Pistol, fiecare având particularități ce determină stilul de joc și strategiile de luptă împotriva celor patru tipuri de inamici. 
+
 Pe parcurs, vor apărea pe hartă, aleatoriu, poțiuni ce oferă jucătorului efecte temporare, precum îmbunătățirea vitezei, refacerea sănătății sau creșterea puterii de atac, susținând astfel o diversificare și adaptare eficientă a strategiilor de joc.
 
 Pentru toate detaliile și o experiență completă, te încurajez să te aventurezi în joc. Mulțumesc și distracție plăcută! :) 
@@ -44,7 +46,9 @@ The Last Stand: Undead Uprising is a 2D shooter game developed in C++ using the 
 *The project was developed as part of academic coursework at the university.*
 
 The game offers a dynamic experience in which the player must survive successive waves of enemies progressively generated throughout each level. The action unfolds on a fixed map, with difficulty increasing steadily through both the number and complexity of enemies.
+
 At the start, the player can choose one of four available weapons: AK-47, M416, Shotgun, or Pistol, each with unique characteristics that influence the gameplay and combat strategy against four distinct enemy types.
+
 Throughout the game, potions spawn randomly on the map, granting temporary effects such as increased movement speed, health regeneration, or enhanced attack power, encouraging varied and adaptive combat strategies.
 
 For all the details and the full experience, I invite you to immerse yourself in the game. Thank you, and enjoy! :)
