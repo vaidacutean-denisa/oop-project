@@ -13,6 +13,7 @@ Pe parcurs, vor apărea pe hartă, aleatoriu, poțiuni ce oferă jucătorului ef
 
 Pentru toate detaliile și o experiență completă, te încurajez să te aventurezi în joc. Mulțumesc și distracție plăcută! 😊
 
+##
 ### Features in dezvoltare ⚙️
  - Implementarea unui meniu de endgame
 
