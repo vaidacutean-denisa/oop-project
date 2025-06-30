@@ -9,7 +9,7 @@
 #include "../headers/MessageDisplay.h"
 #include "../headers/ShieldDecorator.h"
 
-PerkManager::PerkManager(AssetsManager& assetsManager_) : enemiesKilled(0), perkSpawnTreshold(3), assetsManager(assetsManager_) {}
+PerkManager::PerkManager(AssetsManager& assetsManager_) : enemiesKilled(0), perkSpawnThreshold(3), assetsManager(assetsManager_) {}
 
 void PerkManager::spawnPerk(const sf::Vector2u& windowSize) {
 	std::random_device rd;
@@ -68,7 +68,7 @@ void PerkManager::draw(sf::RenderWindow& window) const {
 void PerkManager::onEnemyKilled(const sf::Vector2u& windowSize) {
 	enemiesKilled++;
 
-	if (enemiesKilled >= perkSpawnTreshold) {												// se spawneaza un perk random la fiecare 5 inamici eliminati
+	if (enemiesKilled >= perkSpawnThreshold) {												// se spawneaza un perk random la fiecare 5 inamici eliminati
 		spawnPerk(windowSize);
 		enemiesKilled = 0;
 	}

@@ -18,7 +18,7 @@
 class PerkManager {
 	std::vector<std::unique_ptr<BasePerk>> perks;
 	int enemiesKilled;
-	int perkSpawnTreshold;
+	int perkSpawnThreshold;
 
 	AssetsManager& assetsManager;
 
