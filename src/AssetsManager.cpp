@@ -40,7 +40,7 @@ sf::Font& AssetsManager::getFont(const std::string &id) {
 sf::Sprite AssetsManager::getScaledSprite(const std::string& id, const sf::Vector2u& targetSize) {
     sf::Sprite sprite;
     sprite.setTexture(getTexture(id));
-+
+
     const sf::Vector2u textureSize = getTexture(id).getSize();
     float scaleX = static_cast<float>(targetSize.x) / textureSize.x;
     float scaleY = static_cast<float>(targetSize.y) / textureSize.y;
