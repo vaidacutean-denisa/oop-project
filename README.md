@@ -71,6 +71,7 @@ M: toggles background music on/off
 - Enter: restarts the game after it ends (whether the player wins or loses)
 
 
+##
 ### Probleme 🔻
  - Ar trebui să implementez un sistem mai bun de detectare a coliziunilor, astfel încât să nu se poată suprapune nici inamicii între ei, nici jucătorul cu aceștia
  - Nu am reușit sa determin inamicii să se orienteze cu fața către jucător
