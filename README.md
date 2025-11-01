@@ -70,16 +70,18 @@ M: toggles background music on/off
 - Esc: closes the game window
 - Enter: restarts the game after it ends (whether the player wins or loses)
 
+
+### Probleme 🔻
+ - Ar trebui să implementez un sistem mai bun de detectare a coliziunilor, astfel încât să nu se poată suprapune nici inamicii între ei, nici jucătorul cu aceștia
+ - Nu am reușit sa determin inamicii să se orienteze cu fața către jucător
+
+
 ##
 ## Cerințele proiectului 
 ### Tema 0
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
 - [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
-
-### Probleme 🔻
- - Ar trebui să implementez un sistem mai bun de detectare a coliziunilor, astfel încât să nu se poată suprapune nici inamicii între ei, nici jucătorul cu aceștia
- - Nu am reușit sa determin inamicii să se orienteze cu fața către jucător
    
 ## Tema 1
 
